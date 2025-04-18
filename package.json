@@ -1,0 +1,40 @@
+{
+  "name": "agendamento-clinica",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@fullcalendar/core": "^6.1.11",
+    "@fullcalendar/daygrid": "^6.1.11",
+    "@fullcalendar/interaction": "^6.1.11",
+    "@fullcalendar/react": "^6.1.11",
+    "@fullcalendar/timegrid": "^6.1.11",
+    "@types/react-datepicker": "^7.0.0",
+    "@types/react-select": "^5.0.1",
+    "@types/uuid": "^10.0.0",
+    "agendamento-clinica": "file:",
+    "date-fns": "^3.6.0",
+    "next": "15.3.1",
+    "react": "^18",
+    "react-datepicker": "^8.3.0",
+    "react-dom": "^18",
+    "react-hot-toast": "^2.5.2",
+    "react-select": "^5.10.1",
+    "uuid": "^11.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.3",
+    "postcss": "^8",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5"
+  }
+}

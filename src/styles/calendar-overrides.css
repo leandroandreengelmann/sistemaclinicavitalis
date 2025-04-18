@@ -1,0 +1,171 @@
+/*
+ * Arquivo para sobrescrever estilos do FullCalendar usando Tailwind.
+ * Baseado numa paleta com Indigo, Slate, Sky e Blue.
+ */
+
+/* Definição de Variáveis CSS (se FCv6 as suportar bem) */
+.fc {
+    /* Cores principais - usando tons Tailwind */
+    --fc-neutral-bg-color: theme("colors.slate.50");
+    --fc-list-event-hover-bg-color: theme("colors.slate.100");
+    --fc-highlight-color: theme("colors.sky.100"); /* Cor de seleção de data */
+    --fc-today-bg-color: theme("colors.sky.50"); /* Cor de fundo para "hoje" */
+    --fc-border-color: theme("colors.slate.200");
+    --fc-event-bg-color: theme("colors.blue.500");
+    --fc-event-border-color: theme("colors.blue.500");
+    --fc-event-text-color: theme("colors.white");
+    /* --fc-button-bg-color: theme("colors.indigo.600"); */ /* Melhor definir com @apply */
+    /* --fc-button-text-color: theme("colors.white"); */
+    /* --fc-button-border-color: theme("colors.indigo.600"); */
+    /* --fc-button-hover-bg-color: theme("colors.indigo.700"); */
+    /* --fc-button-hover-border-color: theme("colors.indigo.700"); */
+    /* --fc-button-active-bg-color: theme("colors.indigo.800"); */
+    /* --fc-button-active-border-color: theme("colors.indigo.800"); */
+    
+    /* Ajuste fino de bordas e fontes se necessário */
+    /* --fc-daygrid-event-dot-width: 8px; */
+}
+
+/* Toolbar (Cabeçalho) */
+.fc .fc-toolbar.fc-header-toolbar {
+    /* Fundo mais claro, menos sombra, mais padding */
+    @apply mb-6 p-3 bg-slate-50 rounded-lg border border-slate-200 
+           flex flex-col sm:flex-row justify-between items-center;
+}
+
+.fc .fc-toolbar-title {
+    /* Cor mais suave */
+    @apply text-xl font-semibold text-slate-700 my-2 sm:my-0;
+}
+
+/* Botões da Toolbar */
+.fc .fc-button {
+    /* Usando Indigo como primário */
+    @apply bg-indigo-600 hover:bg-indigo-700 text-white 
+           font-medium py-2 px-4 rounded-md shadow-sm 
+           transition duration-150 ease-in-out 
+           border border-indigo-600 hover:border-indigo-700 
+           focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-1 
+           disabled:opacity-60 disabled:cursor-not-allowed 
+           text-sm;
+}
+
+.fc .fc-button .fc-icon {
+    /* Ajusta o tamanho do ícone dentro do botão */
+    @apply text-base align-middle;
+}
+
+/* Botão "Hoje" - mais sutil */
+.fc .fc-today-button {
+     @apply bg-slate-200 hover:bg-slate-300 text-slate-800 border-slate-200 hover:border-slate-300;
+}
+.fc .fc-today-button:disabled {
+     @apply bg-slate-100 text-slate-400 border-slate-100;
+}
+
+/* Botões de visualização ativos */
+.fc .fc-button-primary:not(:disabled).fc-button-active, 
+.fc .fc-button-primary:not(:disabled):active {
+     /* Mais escuro e com sombra interna */
+     @apply bg-indigo-700 border-indigo-700 shadow-inner;
+}
+
+/* Grupo de botões */
+.fc .fc-button-group {
+    @apply flex space-x-px;
+}
+.fc .fc-button-group > .fc-button {
+    /* Remove arredondamento individual para o grupo parecer unido */
+    @apply rounded-none shadow-none;
+}
+.fc .fc-button-group > .fc-button:first-child {
+    @apply rounded-l-md;
+}
+.fc .fc-button-group > .fc-button:last-child {
+    @apply rounded-r-md;
+}
+
+/* Visualização (Tabela) */
+.fc .fc-view, .fc .fc-scrollgrid {
+    /* Remover arredondamento aqui, aplicar borda geral */
+    @apply border border-slate-200 rounded-lg overflow-hidden;
+}
+
+.fc th {
+    /* Cabeçalho da tabela mais leve */
+    @apply border-b border-slate-200 bg-slate-50 p-2 text-sm font-medium text-slate-500 text-center uppercase tracking-wider font-sans;
+}
+
+/* Células dos Dias (Grid) */
+.fc .fc-daygrid-day {
+    /* Bordas mais sutis */
+    @apply border border-slate-100 hover:bg-slate-50 transition-colors duration-150 relative; /* Adicionado relative para números */
+}
+
+/* Número do dia - Canto superior direito */
+.fc .fc-daygrid-day-number {
+    @apply text-xs text-slate-500 p-1 absolute top-1 right-1;
+}
+
+/* Dia "Hoje" - Usando a variável CSS */
+.fc .fc-day-today {
+    background-color: var(--fc-today-bg-color, theme("colors.sky.50")) !important; 
+}
+
+/* Eventos (Estilo Base) - Remover cor fixa */
+.fc .fc-event {
+    /* Remover cor fixa de teste */
+    /* @apply bg-red-500 text-white; */
+
+    /* Manter outros estilos base */
+    @apply rounded-md px-0 py-0 text-xs font-medium cursor-pointer 
+           transition-opacity duration-150 shadow-sm 
+           border-transparent block; 
+    box-shadow: none !important; 
+}
+
+/* Wrapper padrão do evento - Manter padding removido */
+a.fc-event {
+    padding: 0 !important; 
+}
+
+/* Conteúdo do evento - Manter estilos comentados */
+/*
+.fc .fc-event-main {
+    // ...
+}
+.fc .fc-event-title {
+    // ...
+}
+.fc .fc-timegrid-event .fc-event-main {
+    // ...
+}
+*/
+
+/* Manter hover no conteúdo customizado */
+.fc-event-main-custom:hover {
+    @apply opacity-85;
+}
+
+/* Slot de tempo na TimeGrid */
+.fc .fc-timegrid-slot {
+    @apply border-b border-dotted border-slate-200 h-12; /* Borda pontilhada */
+}
+
+/* Linha atual na TimeGrid */
+.fc .fc-timegrid-now-indicator-line {
+    /* Linha mais vibrante */
+    @apply border-red-500 border-2 z-30; /* Aumentar z-index */
+}
+.fc .fc-timegrid-now-indicator-arrow {
+     /* Seta também vibrante */
+    @apply border-y-red-500;
+}
+
+/* Cor de seleção de tempo */
+.fc .fc-highlight {
+    background-color: var(--fc-highlight-color, theme("colors.sky.100")) !important;
+    opacity: 0.7;
+}
+
+/* --- Adicionar mais seletores e @apply conforme necessário --- */ 

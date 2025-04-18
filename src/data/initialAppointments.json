@@ -1,0 +1,82 @@
+[
+  {
+    "id": "app1",
+    "title": "Consulta - Ana Silva / Dr. Carlos Andrade",
+    "start": "2024-07-29T10:00:00Z",
+    "end": "2024-07-29T10:45:00Z",
+    "doctorId": "doc1",
+    "patientId": "pat1"
+  },
+  {
+    "id": "app2",
+    "title": "Retorno - Bruno Gomes / Dra. Beatriz Lima",
+    "start": "2024-07-29T14:00:00Z",
+    "end": "2024-07-29T14:30:00Z",
+    "doctorId": "doc2",
+    "patientId": "pat2"
+  },
+  {
+    "id": "app3",
+    "title": "Exame - Clara Dias / Dr. Fernando Costa",
+    "start": "2024-07-30T09:15:00Z",
+    "end": "2024-07-30T10:00:00Z",
+    "doctorId": "doc3",
+    "patientId": "pat3"
+  },
+   {
+    "id": "app4",
+    "title": "Consulta - Daniel Alves / Dra. Juliana Martins",
+    "start": "2024-07-31T11:00:00Z",
+    "end": "2024-07-31T11:30:00Z",
+    "doctorId": "doc4",
+    "patientId": "pat4"
+  },
+  {
+    "id": "app5",
+    "title": "Checkup - Eduarda Lima / Dr. Ricardo Sousa",
+    "start": "2024-08-01T15:30:00Z",
+    "end": "2024-08-01T16:00:00Z",
+    "doctorId": "doc5",
+    "patientId": "pat5"
+  },
+  {
+    "id": "app6",
+    "title": "Consulta - Fábio Costa / Dra. Patrícia Almeida",
+    "start": "2024-08-02T08:00:00Z",
+    "end": "2024-08-02T08:45:00Z",
+    "doctorId": "doc6",
+    "patientId": "pat6"
+  },
+  {
+    "id": "app7",
+    "title": "Retorno - Gabriela Martins / Dr. Gustavo Pereira",
+    "start": "2024-08-02T10:30:00Z",
+    "end": "2024-08-02T11:00:00Z",
+    "doctorId": "doc7",
+    "patientId": "pat7"
+  },
+  {
+    "id": "app8",
+    "title": "Consulta - Hugo Sousa / Dra. Sofia Ferreira",
+    "start": "2024-08-05T13:00:00Z",
+    "end": "2024-08-05T13:45:00Z",
+    "doctorId": "doc8",
+    "patientId": "pat8"
+  },
+  {
+    "id": "app9",
+    "title": "Exame - Isabela Almeida / Dr. André Santos",
+    "start": "2024-08-06T16:15:00Z",
+    "end": "2024-08-06T17:00:00Z",
+    "doctorId": "doc9",
+    "patientId": "pat9"
+  },
+  {
+    "id": "app10",
+    "title": "Checkup - João Pereira / Dra. Vanessa Oliveira",
+    "start": "2024-08-07T09:00:00Z",
+    "end": "2024-08-07T09:30:00Z",
+    "doctorId": "doc10",
+    "patientId": "pat10"
+  }
+] 
