@@ -1,7 +1,6 @@
 {
-  "/page": "app/page.js",
-  "/dashboard/page": "app/dashboard/page.js",
+  "/dashboard/healthplans/new/page": "app/dashboard/healthplans/new/page.js",
   "/dashboard/agendamentos/page": "app/dashboard/agendamentos/page.js",
-  "/dashboard/patients/page": "app/dashboard/patients/page.js",
-  "/dashboard/doctors/page": "app/dashboard/doctors/page.js"
+  "/dashboard/healthplans/page": "app/dashboard/healthplans/page.js",
+  "/dashboard/page": "app/dashboard/page.js"
 }

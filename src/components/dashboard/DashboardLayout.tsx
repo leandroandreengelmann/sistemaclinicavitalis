@@ -2,6 +2,7 @@
 
 import { useState, ReactNode } from 'react';
 import Link from 'next/link';
+import { ChevronDownIcon } from '@heroicons/react/24/solid';
 
 interface DashboardLayoutProps {
   children: ReactNode;
@@ -9,6 +10,8 @@ interface DashboardLayoutProps {
 
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isFinanceMenuOpen, setIsFinanceMenuOpen] = useState(false);
+  const [isCadastroMenuOpen, setIsCadastroMenuOpen] = useState(false);
 
   return (
     <div className="min-h-screen bg-gray-50 flex">
@@ -108,6 +111,123 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                 </svg>
                 <span className={`${isSidebarOpen ? 'block' : 'hidden'}`}>Médicos</span>
               </Link>
+            </li>
+            <li>
+              <Link 
+                href="/dashboard/healthplans" 
+                className="flex items-center p-3 text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg transition-colors"
+              >
+                <svg 
+                  xmlns="http://www.w3.org/2000/svg" 
+                  className="h-5 w-5 mr-3" 
+                  fill="none" 
+                  viewBox="0 0 24 24" 
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z" />
+                </svg>
+                <span className={`${isSidebarOpen ? 'block' : 'hidden'}`}>Planos de Saúde</span>
+              </Link>
+            </li>
+            <li>
+              <button
+                onClick={() => setIsCadastroMenuOpen(!isCadastroMenuOpen)}
+                className="w-full flex items-center justify-between p-3 text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg transition-colors group"
+              >
+                <div className="flex items-center">
+                  <svg 
+                    xmlns="http://www.w3.org/2000/svg" 
+                    className="h-5 w-5 mr-3" 
+                    fill="none" 
+                    viewBox="0 0 24 24" 
+                    stroke="currentColor"
+                    strokeWidth={2}
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M19 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3.75 19.5h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Z" />
+                  </svg>
+                  <span className={`${isSidebarOpen ? 'block' : 'hidden'}`}>Cadastro</span>
+                </div>
+                <ChevronDownIcon 
+                  className={`h-4 w-4 text-gray-500 group-hover:text-indigo-600 transition-transform duration-200 ${isCadastroMenuOpen ? 'rotate-180' : ''} ${isSidebarOpen ? 'block' : 'hidden'}`}
+                />
+              </button>
+
+              {isSidebarOpen && isCadastroMenuOpen && (
+                <ul className="mt-1 pl-8 space-y-1">
+                  <li>
+                    <Link href="/dashboard/register/doctor" className="flex items-center p-2 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-500 rounded-lg transition-colors">
+                      Cadastrar Médico
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/dashboard/register/patient" className="flex items-center p-2 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-500 rounded-lg transition-colors">
+                      Cadastrar Paciente
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/dashboard/register/healthplan" className="flex items-center p-2 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-500 rounded-lg transition-colors">
+                       Cadastrar Plano de Saúde
+                    </Link>
+                  </li>
+                </ul>
+              )}
+            </li>
+            <li>
+              <Link 
+                href="/dashboard/healthplans" 
+                className="flex items-center p-3 text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg transition-colors"
+              >
+                <svg 
+                  xmlns="http://www.w3.org/2000/svg" 
+                  className="h-5 w-5 mr-3" 
+                  fill="none" 
+                  viewBox="0 0 24 24" 
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z" />
+                </svg>
+                <span className={`${isSidebarOpen ? 'block' : 'hidden'}`}>Planos de Saúde</span>
+              </Link>
+            </li>
+            <li>
+              <button
+                onClick={() => setIsFinanceMenuOpen(!isFinanceMenuOpen)}
+                className="w-full flex items-center justify-between p-3 text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg transition-colors group"
+              >
+                <div className="flex items-center">
+                  <svg 
+                    xmlns="http://www.w3.org/2000/svg" 
+                    className="h-5 w-5 mr-3" 
+                    fill="none" 
+                    viewBox="0 0 24 24" 
+                    stroke="currentColor" 
+                    strokeWidth={2}
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+                  </svg>
+                  <span className={`${isSidebarOpen ? 'block' : 'hidden'}`}>Financeiro</span>
+                </div>
+                <ChevronDownIcon 
+                  className={`h-4 w-4 text-gray-500 group-hover:text-indigo-600 transition-transform duration-200 ${isFinanceMenuOpen ? 'rotate-180' : ''} ${isSidebarOpen ? 'block' : 'hidden'}`}
+                />
+              </button>
+
+              {isSidebarOpen && isFinanceMenuOpen && (
+                <ul className="mt-1 pl-8 space-y-1">
+                  <li>
+                    <Link href="/dashboard/financeiro" className="flex items-center p-2 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-500 rounded-lg transition-colors">
+                      Visão Geral
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/dashboard/financeiro/relatorios" className="flex items-center p-2 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-500 rounded-lg transition-colors">
+                      Relatórios
+                    </Link>
+                  </li>
+                </ul>
+              )}
             </li>
             <li>
               <Link href="#" className="flex items-center p-3 text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg transition-colors">

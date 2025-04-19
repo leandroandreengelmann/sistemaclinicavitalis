@@ -1,0 +1,12 @@
+[
+  { "id": "cat-rec-1", "name": "Consulta", "type": "Receita" },
+  { "id": "cat-rec-2", "name": "Procedimento", "type": "Receita" },
+  { "id": "cat-rec-3", "name": "Venda Produto", "type": "Receita" },
+  { "id": "cat-des-1", "name": "Aluguel", "type": "Despesa" },
+  { "id": "cat-des-2", "name": "Salários", "type": "Despesa" },
+  { "id": "cat-des-3", "name": "Material Consumo", "type": "Despesa" },
+  { "id": "cat-des-4", "name": "Marketing", "type": "Despesa" },
+  { "id": "cat-des-5", "name": "Impostos", "type": "Despesa" },
+  { "id": "cat-des-6", "name": "Manutenção", "type": "Despesa" },
+  { "id": "cat-des-7", "name": "Outras Despesas", "type": "Despesa" }
+] 

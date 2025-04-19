@@ -1,9 +1,10 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Doctor, Patient, AppointmentFormData, Appointment } from '@/types';
+import { Doctor, Patient, AppointmentFormData, Appointment, HealthPlan } from '@/types/index';
 import doctorsData from '@/data/doctors.json';
 import patientsData from '@/data/patients.json';
+import { useHealthPlans } from '@/context/HealthPlansContext';
 import { format, parseISO, isValid, isAfter } from 'date-fns'; 
 import { ptBR } from 'date-fns/locale';
 
@@ -27,8 +28,12 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
   const [doctorId, setDoctorId] = useState<string>('');
   const [startDate, setStartDate] = useState<string>('');
   const [endDate, setEndDate] = useState<string>('');
+  const [value, setValue] = useState<string>('');
+  const [healthPlanId, setHealthPlanId] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState<string | null>(null); 
+
+  const { healthPlans, isLoading: isLoadingPlans } = useHealthPlans();
 
   const doctors: Doctor[] = doctorsData;
   const patients: Patient[] = patientsData;
@@ -48,6 +53,8 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
       if (isValid(end)) {
          setEndDate(format(end, "yyyy-MM-dd'T'HH:mm"));
       }
+      setValue(initialData.value ? initialData.value.toLocaleString('pt-BR', { minimumFractionDigits: 2 }).replace('.', ',') : '');
+      setHealthPlanId(initialData.healthPlanId || null);
     } else if (selectedDate) {
       const formattedStartDate = format(selectedDate, "yyyy-MM-dd'T'HH:mm");
       setStartDate(formattedStartDate);
@@ -57,6 +64,8 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
       // Limpar campos restantes ao criar novo
       setPatientId('');
       setDoctorId('');
+      setValue('');
+      setHealthPlanId(null);
     }
   }, [initialData, selectedDate, isEditing]);
 
@@ -84,8 +93,14 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+    const numericValue = parseFloat(value.replace(/\./g, '').replace(',', '.'));
+    if (value && (isNaN(numericValue) || numericValue < 0)) {
+        setError('Valor financeiro inválido.');
+        return;
+    }
+
     if (!patientId || !doctorId || !startDate || !endDate) {
-      setError('Por favor, preencha todos os campos.');
+      setError('Por favor, preencha Paciente, Médico, Início e Fim.');
       return;
     }
     if (!validateDates()) {
@@ -97,6 +112,8 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
       doctorId,
       start: parseISO(startDate).toISOString(),
       end: parseISO(endDate).toISOString(),
+      value: value ? numericValue : undefined,
+      healthPlanId: healthPlanId || undefined,
     };
     try {
         await onSave(formData, initialData?.id);
@@ -146,6 +163,26 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
                     {doctors.map(d => (<option key={d.id} value={d.id}>{d.name}</option>))}
                 </select>
             </div>
+            {/* Plano de Saúde Select */}
+            <div>
+              <label htmlFor="healthPlan" className="block text-sm font-medium text-gray-700 mb-1">Plano de Saúde</label>
+              <select 
+                id="healthPlan" 
+                value={healthPlanId ?? ''}
+                onChange={(e) => setHealthPlanId(e.target.value || null)}
+                disabled={isLoadingPlans}
+                className="w-full px-3 py-2 border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-indigo-500 disabled:bg-slate-100"
+              >
+                <option value="">Particular / Nenhum</option>
+                {isLoadingPlans ? (
+                  <option disabled>Carregando planos...</option>
+                ) : (
+                  healthPlans.map(plan => (
+                    <option key={plan.id} value={plan.id}>{plan.name}</option>
+                  ))
+                )}
+              </select>
+            </div>
             {/* Datas Inputs */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
@@ -156,6 +193,26 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
                     <label htmlFor="end-date" className="block text-sm font-medium text-gray-700 mb-1">Fim</label>
                     <input type="datetime-local" id="end-date" value={endDate} onChange={(e) => { setEndDate(e.target.value); validateDates(); }} required className="w-full px-3 py-2 border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-indigo-500"/>
                 </div>
+            </div>
+            {/* Campo Valor (NOVO) */}
+            <div>
+                <label htmlFor="value" className="block text-sm font-medium text-gray-700 mb-1">Valor (R$)</label>
+                <input
+                  type="text"
+                  id="value"
+                  value={value}
+                  onChange={(e) => {
+                    // Simples máscara para valor monetário PT-BR
+                    let v = e.target.value.replace(/\D/g,'');
+                    v = (parseInt(v, 10) / 100).toFixed(2) + '';
+                    v = v.replace(".", ",");
+                    v = v.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+                    if (v === 'NaN' || v === '0,00') v = '';
+                    setValue(v);
+                  }}
+                  placeholder="0,00"
+                  className="w-full px-3 py-2 border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-indigo-500"
+                />
             </div>
             {/* Botões */}
             <div className="flex justify-end items-center pt-4 border-t mt-6 space-x-3">

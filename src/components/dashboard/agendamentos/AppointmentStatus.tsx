@@ -4,9 +4,10 @@ import ProgressBar from '@/components/ui/ProgressBar';
 interface AppointmentStatusProps {
   start: string; // ISO 8601 string
   end: string;   // ISO 8601 string
+  doctorColor?: string; // Nova prop opcional para a cor
 }
 
-const AppointmentStatus: React.FC<AppointmentStatusProps> = ({ start, end }) => {
+const AppointmentStatus: React.FC<AppointmentStatusProps> = ({ start, end, doctorColor }) => {
   const [currentTime, setCurrentTime] = useState(new Date());
 
   useEffect(() => {
@@ -47,7 +48,7 @@ const AppointmentStatus: React.FC<AppointmentStatusProps> = ({ start, end }) => 
       <span className={`text-sm font-medium ${statusColorClass}`}>{statusText}</span>
       {progress !== null && (
         <div className="mt-1 w-full animate-fade-in">
-          <ProgressBar progress={progress} />
+          <ProgressBar progress={progress} color={doctorColor} />
         </div>
       )}
     </div>

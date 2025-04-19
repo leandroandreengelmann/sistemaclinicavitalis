@@ -1,0 +1,60 @@
+[
+  {
+    "id": "trans-1",
+    "type": "Receita",
+    "description": "Consulta inicial - Ana Silva",
+    "categoryId": "cat-rec-1",
+    "value": 250.00,
+    "dueDate": "2024-06-10",
+    "paymentDate": "2024-06-10",
+    "status": "Recebido",
+    "paymentMethod": "PIX",
+    "patientId": "pat1",
+    "doctorId": "doc1",
+    "notes": "Pagamento recebido no dia.",
+    "createdAt": "2024-06-10T10:00:00Z",
+    "updatedAt": "2024-06-10T10:05:00Z"
+  },
+  {
+    "id": "trans-2",
+    "type": "Despesa",
+    "description": "Aluguel Sala Maio/24",
+    "categoryId": "cat-des-1",
+    "value": 1500.00,
+    "dueDate": "2024-06-05",
+    "paymentDate": "2024-06-04",
+    "status": "Pago",
+    "paymentMethod": "Transferência Bancária (TED/DOC)",
+    "notes": "Pago adiantado.",
+    "createdAt": "2024-06-01T09:00:00Z",
+    "updatedAt": "2024-06-04T11:00:00Z"
+  },
+  {
+    "id": "trans-3",
+    "type": "Receita",
+    "description": "Procedimento Estético - Clara Dias",
+    "categoryId": "cat-rec-2",
+    "value": 800.00,
+    "dueDate": "2024-06-20",
+    "paymentDate": null,
+    "status": "Pendente",
+    "paymentMethod": null,
+    "patientId": "pat3",
+    "doctorId": "doc2",
+    "createdAt": "2024-06-15T14:00:00Z",
+    "updatedAt": "2024-06-15T14:00:00Z"
+  },
+    {
+    "id": "trans-4",
+    "type": "Despesa",
+    "description": "Compra material de escritório",
+    "categoryId": "cat-des-3",
+    "value": 150.75,
+    "dueDate": "2024-06-18",
+    "paymentDate": null,
+    "status": "Pendente",
+    "paymentMethod": null,
+    "createdAt": "2024-06-18T11:00:00Z",
+    "updatedAt": "2024-06-18T11:00:00Z"
+  }
+] 

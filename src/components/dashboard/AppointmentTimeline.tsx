@@ -1,10 +1,10 @@
 import React from 'react';
-import { Appointment } from '@/types';
+import { Appointment, Doctor } from '@/types/index';
 // Importar funções necessárias de date-fns
-import { isToday, isThisWeek, isThisMonth, parseISO, format } from 'date-fns'; 
+import { isToday, isThisWeek, isThisMonth, parseISO, format, isPast } from 'date-fns'; 
 import { ptBR } from 'date-fns/locale';
-import doctorsData from '@/data/doctors.json';
-import patientsData from '@/data/patients.json';
+import { useAppointments } from '@/context/AppointmentsContext';
+import { useDoctors } from '@/context/DoctorsContext';
 import AppointmentStatus from '@/components/dashboard/agendamentos/AppointmentStatus';
 
 interface AppointmentTimelineProps {
@@ -12,7 +12,7 @@ interface AppointmentTimelineProps {
   dateRange: 'today' | 'week' | 'month';
 }
 
-// Função auxiliar para obter valor numérico do status
+// Restaurar Função auxiliar para obter valor numérico do status para ordenação
 const getAppointmentStatusValue = (appointment: Appointment): number => {
   try {
     const startTime = parseISO(appointment.start).getTime();
@@ -32,8 +32,17 @@ const getAppointmentStatusValue = (appointment: Appointment): number => {
   }
 };
 
-const AppointmentTimeline: React.FC<AppointmentTimelineProps> = ({ appointments, dateRange }) => {
-  
+const AppointmentTimeline: React.FC<AppointmentTimelineProps> = ({ appointments: initialAppointments, dateRange }) => {
+  // Usar contexto para pegar os appointments atualizados
+  const { appointments: contextAppointments, updateAppointment } = useAppointments();
+  // Usar contexto para médicos
+  const { doctors: allDoctors, getDoctorById } = useDoctors();
+
+  // Usar os appointments do contexto que já incluem o status
+  const appointments = initialAppointments.map(initialApp => 
+    contextAppointments.find(ctxApp => ctxApp.id === initialApp.id) || initialApp
+  );
+
   // Restaurar lógica de filtro anterior
   const filteredAppointments = appointments.filter(appointment => {
     try {
@@ -52,12 +61,12 @@ const AppointmentTimeline: React.FC<AppointmentTimelineProps> = ({ appointments,
     return false;
   });
 
-  // Modificar a lógica de ordenação
+  // Restaurar ordenação por Status e depois por Hora
   const sortedAppointments = [...filteredAppointments].sort((a, b) => {
     const statusA = getAppointmentStatusValue(a);
     const statusB = getAppointmentStatusValue(b);
 
-    // Ordenar primeiro pelo status
+    // Ordenar primeiro pelo status (Em Andamento > Agendado > Finalizado)
     if (statusA !== statusB) {
       return statusA - statusB;
     }
@@ -71,16 +80,10 @@ const AppointmentTimeline: React.FC<AppointmentTimelineProps> = ({ appointments,
     }
   });
 
-  // Restaurar mapeamento de doctors/patients para acesso rápido
-  const doctors = doctorsData.reduce((acc, doctor) => {
-    acc[doctor.id] = doctor.name;
-    return acc;
-  }, {} as { [key: string]: string });
-
-  const patients = patientsData.reduce((acc, patient) => {
-    acc[patient.id] = patient.name;
-    return acc;
-  }, {} as { [key: string]: string });
+  const handleFinalizar = (id: string) => {
+    updateAppointment(id, { status: 'Finalizado' });
+    // O toast de sucesso/erro já é tratado no context
+  };
 
   return (
     // Usar a classe de container anterior
@@ -119,8 +122,16 @@ const AppointmentTimeline: React.FC<AppointmentTimelineProps> = ({ appointments,
                 formattedEndTime = "Inválido";
             }
             
-            const doctorName = doctors[appointment.doctorId] || 'Médico não encontrado';
-            const patientName = patients[appointment.patientId] || 'Paciente não encontrado';
+            // Buscar o médico e sua cor usando o contexto
+            const doctor = getDoctorById(appointment.doctorId);
+            const doctorName = doctor?.name || 'Médico desconhecido';
+            const doctorColor = doctor?.color;
+            
+            // Buscar nome do paciente (exemplo, precisaria dos dados)
+            const patientName = "Paciente Exemplo"; // Placeholder
+
+            // Verificar se consulta já terminou
+            const consultaTerminou = isPast(endDate || new Date());
 
             return (
               // Estrutura do item da lista anterior
@@ -132,7 +143,8 @@ const AppointmentTimeline: React.FC<AppointmentTimelineProps> = ({ appointments,
                 </div>
                 {/* Bloco dos Detalhes */}
                 <div className="ml-3 bg-gray-50 border rounded-md p-3 flex-grow shadow-sm hover:shadow transition-shadow">
-                  <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start">
+                  {/* Detalhes - Nome, Médico, Data */}
+                  <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-2">
                     <div>
                       <h3 className="font-semibold text-gray-800 text-sm">{patientName}</h3>
                       <p className="text-gray-600 text-xs">Dr(a). {doctorName}</p>
@@ -141,10 +153,39 @@ const AppointmentTimeline: React.FC<AppointmentTimelineProps> = ({ appointments,
                       <p className="text-xs text-gray-500">{formattedDate}</p>
                     </div>
                   </div>
-                  {/* Adicionar o Status aqui dentro do bloco de detalhes */}
-                  <div className="mt-2 pt-2 border-t border-gray-200">
-                      <AppointmentStatus start={appointment.start} end={appointment.end} />
+                  
+                  {/* Status/Progresso (em sua própria linha abaixo) */}
+                  <div className="pt-2 border-t border-gray-200">
+                      {appointment.status === 'Finalizado' ? (
+                        <span className="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                          ✔️ Finalizado
+                        </span>
+                      ) : consultaTerminou ? (
+                        // Mostrar "Aguardando Finalização" sem barra se já terminou mas não foi finalizado
+                        <span className="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                          Aguardando Finalização
+                        </span>
+                      ) : (
+                        // Passar a cor do médico para o AppointmentStatus
+                        <AppointmentStatus 
+                          start={appointment.start} 
+                          end={appointment.end} 
+                          doctorColor={doctorColor}
+                        />
+                      )}
                   </div>
+
+                  {/* Botão Finalizar Condicional (abaixo e à direita) */}
+                  {consultaTerminou && appointment.status !== 'Finalizado' && (
+                    <div className="text-right mt-2">
+                      <button
+                        onClick={() => handleFinalizar(appointment.id)}
+                        className="px-3 py-1 bg-indigo-600 text-white text-xs font-medium rounded-md hover:bg-indigo-700 transition-colors shadow-sm"
+                      >
+                        Finalizar
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
             );

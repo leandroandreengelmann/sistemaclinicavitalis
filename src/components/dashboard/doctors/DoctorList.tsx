@@ -1,14 +1,13 @@
 import React from 'react';
-import { Doctor } from '@/types';
+import { Doctor } from '@/types/index';
 import Link from 'next/link';
 
 interface DoctorListProps {
   doctors: Doctor[];
-  onEdit: (doctor: Doctor) => void;
   onDelete: (doctorId: string) => void;
 }
 
-const DoctorList: React.FC<DoctorListProps> = ({ doctors, onEdit, onDelete }) => {
+const DoctorList: React.FC<DoctorListProps> = ({ doctors, onDelete }) => {
   if (!doctors || doctors.length === 0) {
     return <p className="text-center text-gray-500">Nenhum médico encontrado.</p>;
   }
@@ -20,6 +19,12 @@ const DoctorList: React.FC<DoctorListProps> = ({ doctors, onEdit, onDelete }) =>
           <tr>
             <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
               Nome
+            </th>
+            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Especialidades
+            </th>
+            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Cor
             </th>
             <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
               ID
@@ -34,19 +39,31 @@ const DoctorList: React.FC<DoctorListProps> = ({ doctors, onEdit, onDelete }) =>
             <tr key={doctor.id}>
               <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                 <Link href={`/dashboard/doctors/${doctor.id}`} className="text-indigo-600 hover:text-indigo-800 hover:underline">
-                  Dr(a). {doctor.name}
+                  {doctor.name}
                 </Link>
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                {doctor.specialties && doctor.specialties.length > 0 
+                  ? doctor.specialties.join(', ') 
+                  : <span className="italic text-gray-400">N/A</span>}
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                <span 
+                  className="inline-block h-4 w-4 rounded-sm border border-gray-300"
+                  style={{ backgroundColor: doctor.color || 'transparent' }}
+                  title={doctor.color || 'Sem cor'}
+                ></span>
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                 {doctor.id}
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
-                <button 
-                  onClick={() => onEdit(doctor)}
+                <Link 
+                  href={`/dashboard/doctors/${doctor.id}`}
                   className="text-indigo-600 hover:text-indigo-900"
                 >
-                  Editar Nome
-                </button>
+                  Editar
+                </Link>
                 <button 
                   onClick={() => onDelete(doctor.id)}
                   className="text-red-600 hover:text-red-900"

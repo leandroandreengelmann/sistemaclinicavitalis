@@ -1,8 +1,9 @@
 import React from 'react';
-import { Appointment } from '@/types';
+import { Appointment } from '@/types/index'; // Corrigir caminho se necessário
 import { format } from 'date-fns'; // Para formatar datas
 import { ptBR } from 'date-fns/locale'; // Para formato brasileiro
 import AppointmentStatus from './AppointmentStatus'; // Importar o novo componente
+import { useDoctors } from '@/context/DoctorsContext'; // Importar contexto dos médicos
 
 interface AppointmentListProps {
   appointments: Appointment[];
@@ -11,6 +12,9 @@ interface AppointmentListProps {
 }
 
 const AppointmentList: React.FC<AppointmentListProps> = ({ appointments, onEdit, onDelete }) => {
+  
+  // Obter a função para buscar médico por ID
+  const { getDoctorById } = useDoctors();
   
   // Ordenar agendamentos por data de início (mais recentes primeiro)
   const sortedAppointments = [...appointments].sort((a, b) => 
@@ -56,6 +60,10 @@ const AppointmentList: React.FC<AppointmentListProps> = ({ appointments, onEdit,
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
           {sortedAppointments.map((appointment) => {
+            // Buscar médico e cor
+            const doctor = getDoctorById(appointment.doctorId);
+            const doctorColor = doctor?.color;
+
             const startTime = new Date(appointment.start).getTime();
             // Desabilitar se o horário de início já passou ou é agora
             const isDisabled = now >= startTime; 
@@ -72,7 +80,11 @@ const AppointmentList: React.FC<AppointmentListProps> = ({ appointments, onEdit,
                   {formatDate(appointment.end)}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  <AppointmentStatus start={appointment.start} end={appointment.end} />
+                  <AppointmentStatus 
+                    start={appointment.start} 
+                    end={appointment.end} 
+                    doctorColor={doctorColor}
+                  />
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
                   <button 

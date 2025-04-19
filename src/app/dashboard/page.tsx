@@ -25,6 +25,8 @@ export default function DashboardPage() {
           dateRange={dateRange} 
         />
       </div>
+
+      {/* Layout original restaurado */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2">
           <AppointmentTimeline 
@@ -32,7 +34,7 @@ export default function DashboardPage() {
             dateRange={dateRange} 
           />
         </div>
-        <div className="space-y-6">
+        <div className="space-y-6"> {/* Coluna da direita */}
           <UpcomingAppointments 
             appointments={appointments} 
           />
@@ -42,6 +44,7 @@ export default function DashboardPage() {
           />
         </div>
       </div>
+
     </DashboardLayout>
   );
 } 
