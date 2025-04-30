@@ -35,7 +35,7 @@ async function writeDoctors(doctors: Doctor[]): Promise<void> {
 
 // --- Handler para PUT (Atualização Completa) ou PATCH (Atualização Parcial) ---
 // Vamos usar PUT para simplificar, esperando o objeto completo do médico
-export async function PUT(request: NextRequest, context: { params: { id: string } }) {
+export async function PUT(request: NextRequest, context) {
     const doctorId = context.params.id; // Access id via context
 
     if (!doctorId) {
