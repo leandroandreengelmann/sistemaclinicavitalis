@@ -3,6 +3,10 @@
 import React, { createContext, useState, useEffect, useContext, ReactNode } from 'react';
 import { HealthPlan } from '@/types/index'; 
 import { v4 as uuidv4 } from 'uuid';
+import initialHealthPlansData from '@/data/healthPlans.json'; // Importar dados iniciais
+
+// Chave para o localStorage
+const LOCAL_STORAGE_KEY = 'healthPlansData';
 
 // Definir a interface para o valor do contexto
 interface HealthPlansContextType {
@@ -22,38 +26,67 @@ export const HealthPlansProvider = ({ children }: { children: ReactNode }) => {
   const [healthPlans, setHealthPlans] = useState<HealthPlan[]>([]);
   const [isLoading, setIsLoading] = useState(true); // Começa como true até carregar
 
-  // Efeito para carregar dados (atualmente vazio, mas pronto para API)
+  // Efeito para carregar dados do localStorage ou inicializar
   useEffect(() => {
-    // Aqui você poderia buscar dados de uma API ou localStorage
-    // Exemplo: fetch('/api/healthplans').then(res => res.json()).then(data => setHealthPlans(data));
-    setHealthPlans([]); // Inicia vazio por enquanto
+    try {
+      const storedData = localStorage.getItem(LOCAL_STORAGE_KEY);
+      if (storedData) {
+        setHealthPlans(JSON.parse(storedData));
+      } else {
+        // Se não houver nada no localStorage, usa os dados iniciais e salva lá
+        const initialData: HealthPlan[] = initialHealthPlansData; // Especifica o tipo aqui
+        setHealthPlans(initialData);
+        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(initialData));
+      }
+    } catch (error) {
+      console.error("Erro ao carregar ou inicializar planos de saúde do localStorage:", error);
+      // Em caso de erro, usa os dados iniciais como fallback (sem salvar no localStorage)
+      const fallbackData: HealthPlan[] = initialHealthPlansData; // Especifica o tipo aqui também
+      setHealthPlans(fallbackData);
+    }
     setIsLoading(false);
   }, []);
+
+  // Função auxiliar para salvar no localStorage
+  const saveToLocalStorage = (plans: HealthPlan[]) => {
+    try {
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(plans));
+    } catch (error) {
+      console.error("Erro ao salvar planos de saúde no localStorage:", error);
+    }
+  };
 
   // Adicionar Plano de Saúde
   const addHealthPlan = (planData: Omit<HealthPlan, 'id'>) => {
     const newPlan: HealthPlan = {
       ...planData,
-      id: uuidv4(), // Gera um novo ID único
+      id: uuidv4(),
     };
-    setHealthPlans(prevPlans => [...prevPlans, newPlan]);
-    // Lógica para salvar no backend/localStorage aqui
+    setHealthPlans(prevPlans => {
+      const updatedPlans = [...prevPlans, newPlan];
+      saveToLocalStorage(updatedPlans); // Salva no localStorage
+      return updatedPlans;
+    });
   };
 
   // Atualizar Plano de Saúde
   const updateHealthPlan = (id: string, planData: Partial<Omit<HealthPlan, 'id'>>) => {
-    setHealthPlans(prevPlans =>
-      prevPlans.map(plan =>
+    setHealthPlans(prevPlans => {
+      const updatedPlans = prevPlans.map(plan =>
         plan.id === id ? { ...plan, ...planData } : plan
-      )
-    );
-    // Lógica para salvar no backend/localStorage aqui
+      );
+      saveToLocalStorage(updatedPlans); // Salva no localStorage
+      return updatedPlans;
+    });
   };
 
   // Deletar Plano de Saúde
   const deleteHealthPlan = (id: string) => {
-    setHealthPlans(prevPlans => prevPlans.filter(plan => plan.id !== id));
-    // Lógica para salvar no backend/localStorage aqui
+    setHealthPlans(prevPlans => {
+      const updatedPlans = prevPlans.filter(plan => plan.id !== id);
+      saveToLocalStorage(updatedPlans); // Salva no localStorage
+      return updatedPlans;
+    });
   };
 
   // Buscar Plano de Saúde por ID

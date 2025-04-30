@@ -145,16 +145,16 @@ export default function DoctorProfilePage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Horários de Trabalho */}
           <div>
-            <h2 className="text-lg font-semibold text-gray-700 mb-3">Horários de Atendimento</h2>
+            <h2 className="text-lg font-semibold text-gray-700 mb-3">Horários de Atendimento (Debug)</h2>
             {doctor.workingHours && doctor.workingHours.length > 0 ? (
-              <ul className="space-y-2 text-sm text-gray-600">
+              // Usar Divs simples para Debug
+              <div className="text-sm text-gray-600">
                 {doctor.workingHours.map((slot, index) => (
-                  <li key={index} className="flex justify-between p-2 bg-gray-50 rounded">
-                    <span className="font-medium">{slot.day}</span>
-                    <span>{slot.start} - {slot.end}</span>
-                  </li>
+                  <div key={index} className="border-b py-1">
+                    <span>Dia: {slot.day}, Início: {slot.start}, Fim: {slot.end}</span>
+                  </div>
                 ))}
-              </ul>
+              </div>
             ) : (
               <p className="text-sm text-gray-500 italic">Nenhum horário definido.</p>
             )}

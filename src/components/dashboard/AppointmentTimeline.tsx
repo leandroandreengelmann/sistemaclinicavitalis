@@ -86,26 +86,26 @@ const AppointmentTimeline: React.FC<AppointmentTimelineProps> = ({ appointments:
   };
 
   return (
-    // Usar a classe de container anterior
-    <div className="bg-white rounded-lg shadow-sm p-6">
-      <h2 className="text-xl font-semibold text-gray-800 mb-4">Linha do Tempo de Consultas ({dateRange})</h2>
+    // Container adjusted for dark mode
+    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
+      {/* Title adjusted for dark mode */}
+      <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-100 mb-4">Linha do Tempo de Consultas ({dateRange})</h2>
       
       {sortedAppointments.length === 0 ? (
-        // Usar a mensagem de "nenhum encontrado" anterior
+        // Empty state adjusted for dark mode
         <div className="text-center py-8">
           <svg 
             xmlns="http://www.w3.org/2000/svg" 
-            className="h-12 w-12 mx-auto text-gray-400" 
+            className="h-12 w-12 mx-auto text-gray-400 dark:text-gray-500" 
             fill="none" 
             viewBox="0 0 24 24" 
             stroke="currentColor"
           >
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
-          <p className="mt-2 text-gray-500">Nenhuma consulta encontrada para este período.</p>
+          <p className="mt-2 text-gray-500 dark:text-gray-400">Nenhuma consulta encontrada para este período.</p>
         </div>
       ) : (
-        // Usar a estrutura de lista anterior
         <div className="space-y-4">
           {sortedAppointments.map((appointment) => {
             let startDate, endDate, formattedDate, formattedStartTime, formattedEndTime;
@@ -134,39 +134,38 @@ const AppointmentTimeline: React.FC<AppointmentTimelineProps> = ({ appointments:
             const consultaTerminou = isPast(endDate || new Date());
 
             return (
-              // Estrutura do item da lista anterior
               <div key={appointment.id} className="flex items-start">
-                {/* Bloco da Hora */}
+                {/* Time block adjusted for dark mode */}
                 <div className="flex-shrink-0 w-20 text-center pt-1">
-                  <span className="text-sm font-semibold text-indigo-600">{formattedStartTime}</span>
-                  <span className="block text-xs text-gray-500">{formattedEndTime}</span>
+                  <span className="text-sm font-semibold text-indigo-600 dark:text-indigo-400">{formattedStartTime}</span>
+                  <span className="block text-xs text-gray-500 dark:text-gray-400">{formattedEndTime}</span>
                 </div>
-                {/* Bloco dos Detalhes */}
-                <div className="ml-3 bg-gray-50 border rounded-md p-3 flex-grow shadow-sm hover:shadow transition-shadow">
-                  {/* Detalhes - Nome, Médico, Data */}
+                {/* Details block adjusted for dark mode */}
+                <div className="ml-3 bg-gray-50 dark:bg-gray-700/50 border dark:border-gray-700 rounded-md p-3 flex-grow shadow-sm hover:shadow dark:hover:shadow-gray-600/50 transition-shadow">
                   <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-2">
                     <div>
-                      <h3 className="font-semibold text-gray-800 text-sm">{patientName}</h3>
-                      <p className="text-gray-600 text-xs">Dr(a). {doctorName}</p>
+                      {/* Patient/Doctor text adjusted for dark mode */}
+                      <h3 className="font-semibold text-gray-800 dark:text-gray-100 text-sm">{patientName}</h3>
+                      <p className="text-gray-600 dark:text-gray-300 text-xs">Dr(a). {doctorName}</p>
                     </div>
                     <div className="mt-1 sm:mt-0 text-right">
-                      <p className="text-xs text-gray-500">{formattedDate}</p>
+                       {/* Date text adjusted for dark mode */}
+                      <p className="text-xs text-gray-500 dark:text-gray-400">{formattedDate}</p>
                     </div>
                   </div>
                   
-                  {/* Status/Progresso (em sua própria linha abaixo) */}
-                  <div className="pt-2 border-t border-gray-200">
+                   {/* Separator adjusted for dark mode */}
+                  <div className="pt-2 border-t border-gray-200 dark:border-gray-600">
+                      {/* Status badges - Assuming AppointmentStatus handles its own dark mode */}
                       {appointment.status === 'Finalizado' ? (
-                        <span className="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                        <span className="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 dark:bg-green-800/30 text-green-800 dark:text-green-200">
                           ✔️ Finalizado
                         </span>
                       ) : consultaTerminou ? (
-                        // Mostrar "Aguardando Finalização" sem barra se já terminou mas não foi finalizado
-                        <span className="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                        <span className="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 dark:bg-yellow-800/30 text-yellow-800 dark:text-yellow-200">
                           Aguardando Finalização
                         </span>
                       ) : (
-                        // Passar a cor do médico para o AppointmentStatus
                         <AppointmentStatus 
                           start={appointment.start} 
                           end={appointment.end} 
@@ -175,12 +174,12 @@ const AppointmentTimeline: React.FC<AppointmentTimelineProps> = ({ appointments:
                       )}
                   </div>
 
-                  {/* Botão Finalizar Condicional (abaixo e à direita) */}
+                   {/* Finish button adjusted for dark mode */}
                   {consultaTerminou && appointment.status !== 'Finalizado' && (
                     <div className="text-right mt-2">
                       <button
                         onClick={() => handleFinalizar(appointment.id)}
-                        className="px-3 py-1 bg-indigo-600 text-white text-xs font-medium rounded-md hover:bg-indigo-700 transition-colors shadow-sm"
+                        className="px-3 py-1 bg-indigo-600 dark:bg-indigo-500 text-white text-xs font-medium rounded-md hover:bg-indigo-700 dark:hover:bg-indigo-600 transition-colors shadow-sm"
                       >
                         Finalizar
                       </button>

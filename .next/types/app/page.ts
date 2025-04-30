@@ -1,4 +1,4 @@
-// File: C:\Users\leand\OneDrive\Área de Trabalho\calendar2.2\src\app\page.tsx
+// File: D:\clinicavitales\clinicavitale1.5comia\src\app\page.tsx
 import * as entry from '../../../src/app/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

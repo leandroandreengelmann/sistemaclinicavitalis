@@ -169,3 +169,93 @@ a.fc-event {
 }
 
 /* --- Adicionar mais seletores e @apply conforme necessário --- */ 
+
+/* Dark Mode Overrides */
+.dark .fc {
+    --fc-neutral-bg-color: theme("colors.gray.800");
+    --fc-list-event-hover-bg-color: theme("colors.gray.700");
+    --fc-highlight-color: theme("colors.sky.900");
+    --fc-today-bg-color: theme("colors.gray.700 / 50%"); /* Semi-transparent */
+    --fc-border-color: theme("colors.gray.600");
+}
+
+.dark .fc .fc-toolbar.fc-header-toolbar {
+    @apply bg-gray-900 border-gray-700;
+}
+
+.dark .fc .fc-toolbar-title {
+    @apply text-gray-100;
+}
+
+.dark .fc .fc-button {
+    @apply bg-indigo-500 hover:bg-indigo-600 text-white 
+           border-indigo-500 hover:border-indigo-600 
+           focus:ring-indigo-400;
+}
+
+.dark .fc .fc-button-primary:disabled {
+     @apply bg-gray-600 border-gray-600 text-gray-400;
+}
+
+.dark .fc .fc-today-button {
+     @apply bg-gray-600 hover:bg-gray-500 text-gray-200 border-gray-600 hover:border-gray-500;
+}
+.dark .fc .fc-today-button:disabled {
+     @apply bg-gray-700 text-gray-500 border-gray-700;
+}
+
+.dark .fc .fc-button-primary:not(:disabled).fc-button-active,
+.dark .fc .fc-button-primary:not(:disabled):active {
+     @apply bg-indigo-600 border-indigo-600;
+}
+
+.dark .fc .fc-view,
+.dark .fc .fc-scrollgrid {
+    @apply border-gray-700;
+}
+
+.dark .fc th {
+    @apply border-b border-gray-700 bg-gray-700 text-gray-300;
+}
+
+.dark .fc td {
+    @apply border-gray-700;
+}
+
+.dark .fc .fc-daygrid-day {
+    @apply border-gray-700 hover:bg-gray-700/50;
+}
+
+.dark .fc .fc-daygrid-day-number {
+    @apply text-gray-400;
+}
+
+.dark .fc .fc-day-today {
+    background-color: var(--fc-today-bg-color, theme("colors.gray.700")) !important; 
+}
+
+.dark .fc .fc-timegrid-slot {
+    @apply border-b border-dotted border-gray-600;
+}
+
+/* Ajustar cores das linhas de grade (se necessário) */
+.dark .fc-timegrid-axis,
+.dark .fc-timegrid-slot-lane,
+.dark .fc-timegrid-slots tr > td {
+    @apply border-gray-700;
+}
+
+.dark .fc .fc-timegrid-axis-cushion {
+     @apply text-gray-400;
+}
+
+/* Estilos para os eventos no modo escuro podem ser definidos 
+   diretamente no CustomEventContent se ele receber props de tema,
+   ou aqui se necessário sobrescrever cores base */
+
+/* Exemplo para texto de evento padrão se não usar CustomEventContent */
+/* 
+.dark .fc-event {
+    --fc-event-text-color: theme("colors.gray.100"); 
+}
+*/ 

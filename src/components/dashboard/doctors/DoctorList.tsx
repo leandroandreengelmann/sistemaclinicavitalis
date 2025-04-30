@@ -4,10 +4,11 @@ import Link from 'next/link';
 
 interface DoctorListProps {
   doctors: Doctor[];
+  onEdit: (doctor: Doctor) => void;
   onDelete: (doctorId: string) => void;
 }
 
-const DoctorList: React.FC<DoctorListProps> = ({ doctors, onDelete }) => {
+const DoctorList: React.FC<DoctorListProps> = ({ doctors, onEdit, onDelete }) => {
   if (!doctors || doctors.length === 0) {
     return <p className="text-center text-gray-500">Nenhum médico encontrado.</p>;
   }
@@ -57,12 +58,20 @@ const DoctorList: React.FC<DoctorListProps> = ({ doctors, onDelete }) => {
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                 {doctor.id}
               </td>
-              <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
-                <Link 
-                  href={`/dashboard/doctors/${doctor.id}`}
-                  className="text-indigo-600 hover:text-indigo-900"
+              <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-4">
+                <button 
+                  onClick={() => onEdit(doctor)}
+                  className="text-indigo-600 hover:text-indigo-900 font-medium"
+                  title="Editar horários e dados do médico"
                 >
                   Editar
+                </button>
+                <Link 
+                  href={`/dashboard/medico/${doctor.id}`} 
+                  className="text-green-600 hover:text-green-900"
+                  title="Ver painel individual do médico"
+                >
+                  Painel
                 </Link>
                 <button 
                   onClick={() => onDelete(doctor.id)}

@@ -1,9 +1,46 @@
 'use client';
 
-import React, { createContext, useState, useEffect, useContext, ReactNode } from 'react';
-import { Patient } from '@/types/index'; 
+import React, { createContext, useState, useEffect, useContext, ReactNode, useCallback } from 'react';
+import { toast } from 'react-hot-toast';
 import initialPatientsData from '@/data/patients.json';
 import { v4 as uuidv4 } from 'uuid';
+
+// Interface para representar um paciente
+export interface Patient {
+  id: string;
+  name: string;
+  birthDate: string; // Ou Date?
+  gender?: string;
+  cpf?: string;
+  rg?: string;
+  phone?: string;
+  email?: string;
+  address?: {
+    street: string;
+    number: string;
+    complement?: string;
+    neighborhood: string;
+    city: string;
+    state: string;
+    zipCode: string;
+  };
+  insurance?: {
+    provider: string;
+    policyNumber: string;
+    expiryDate?: string;
+  };
+  emergencyContact?: {
+    name: string;
+    phone: string;
+    relationship?: string;
+  };
+  medicalHistory?: string[];
+  allergies?: string[];
+  medications?: string[];
+  notes?: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
 
 interface PatientsContextType {
   patients: Patient[];

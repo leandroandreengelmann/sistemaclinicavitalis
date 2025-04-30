@@ -130,48 +130,60 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
 
   return (
     <div 
-      className="fixed inset-0 bg-gray-600 bg-opacity-75 flex justify-center items-center z-50 p-4 transition-opacity duration-300 ease-in-out"
+      className="fixed inset-0 bg-black bg-opacity-50 dark:bg-opacity-70 flex justify-center items-center z-50 p-4 transition-opacity duration-300 ease-in-out"
       onClick={onClose} 
     >
       <div 
-        className="bg-white p-6 rounded-lg shadow-xl w-full max-w-lg transform transition-all duration-300 ease-in-out scale-100 opacity-100 animate-fade-in" 
+        className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-xl w-full max-w-lg transform transition-all duration-300 ease-in-out scale-100 opacity-100 animate-fade-in" 
         onClick={(e) => e.stopPropagation()} 
       >
-        <div className="flex justify-between items-center mb-4 border-b pb-2">
-             <h2 className="text-xl font-semibold text-gray-800">{isEditing ? 'Editar Agendamento' : 'Novo Agendamento'}</h2>
-             <button onClick={onClose} className="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+        <div className="flex justify-between items-center mb-4 border-b dark:border-gray-600 pb-2">
+             <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-100">{isEditing ? 'Editar Agendamento' : 'Novo Agendamento'}</h2>
+             <button onClick={onClose} className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 text-2xl">&times;</button>
         </div>
         {error && (
-            <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+            <div className="mb-4 p-3 bg-red-100 dark:bg-red-900/30 border border-red-400 dark:border-red-600 text-red-700 dark:text-red-200 rounded">
                 {error}
             </div>
         )}
         <form onSubmit={handleSubmit} className="space-y-4">
             {/* Paciente Select */}
             <div>
-                <label htmlFor="patient" className="block text-sm font-medium text-gray-700 mb-1">Paciente</label>
-                <select id="patient" value={patientId} onChange={(e) => setPatientId(e.target.value)} required className="w-full px-3 py-2 border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-indigo-500">
+                <label htmlFor="patient" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Paciente</label>
+                <select 
+                    id="patient" 
+                    value={patientId} 
+                    onChange={(e) => setPatientId(e.target.value)} 
+                    required 
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-300 dark:focus:ring-indigo-400 focus:border-indigo-500 dark:focus:border-indigo-400"
+                >
                     <option value="" disabled>Selecione um paciente</option>
                     {patients.map(p => (<option key={p.id} value={p.id}>{p.name}</option>))}
                 </select>
             </div>
             {/* Médico Select */}
             <div>
-                <label htmlFor="doctor" className="block text-sm font-medium text-gray-700 mb-1">Médico</label>
-                <select id="doctor" value={doctorId} onChange={(e) => setDoctorId(e.target.value)} required className="w-full px-3 py-2 border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-indigo-500">
+                <label htmlFor="doctor" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Médico</label>
+                <select 
+                    id="doctor" 
+                    value={doctorId} 
+                    onChange={(e) => setDoctorId(e.target.value)} 
+                    required 
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-300 dark:focus:ring-indigo-400 focus:border-indigo-500 dark:focus:border-indigo-400"
+                >
                     <option value="" disabled>Selecione um médico</option>
                     {doctors.map(d => (<option key={d.id} value={d.id}>{d.name}</option>))}
                 </select>
             </div>
             {/* Plano de Saúde Select */}
             <div>
-              <label htmlFor="healthPlan" className="block text-sm font-medium text-gray-700 mb-1">Plano de Saúde</label>
+              <label htmlFor="healthPlan" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Plano de Saúde</label>
               <select 
                 id="healthPlan" 
                 value={healthPlanId ?? ''}
                 onChange={(e) => setHealthPlanId(e.target.value || null)}
                 disabled={isLoadingPlans}
-                className="w-full px-3 py-2 border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-indigo-500 disabled:bg-slate-100"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-300 dark:focus:ring-indigo-400 focus:border-indigo-500 dark:focus:border-indigo-400 disabled:bg-gray-100 dark:disabled:bg-gray-600 disabled:text-gray-500 dark:disabled:text-gray-400"
               >
                 <option value="">Particular / Nenhum</option>
                 {isLoadingPlans ? (
@@ -186,42 +198,51 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
             {/* Datas Inputs */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                    <label htmlFor="start-date" className="block text-sm font-medium text-gray-700 mb-1">Início</label>
-                    <input type="datetime-local" id="start-date" value={startDate} onChange={(e) => { setStartDate(e.target.value); validateDates(); }} required className="w-full px-3 py-2 border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-indigo-500"/>
+                    <label htmlFor="start-date" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Início</label>
+                    <input type="datetime-local" id="start-date" value={startDate} onChange={(e) => { setStartDate(e.target.value); validateDates(); }} required className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-300 dark:focus:ring-indigo-400 focus:border-indigo-500 dark:focus:border-indigo-400"/>
                 </div>
                 <div>
-                    <label htmlFor="end-date" className="block text-sm font-medium text-gray-700 mb-1">Fim</label>
-                    <input type="datetime-local" id="end-date" value={endDate} onChange={(e) => { setEndDate(e.target.value); validateDates(); }} required className="w-full px-3 py-2 border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-indigo-500"/>
+                    <label htmlFor="end-date" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Fim</label>
+                    <input type="datetime-local" id="end-date" value={endDate} onChange={(e) => { setEndDate(e.target.value); validateDates(); }} required className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-300 dark:focus:ring-indigo-400 focus:border-indigo-500 dark:focus:border-indigo-400"/>
                 </div>
             </div>
             {/* Campo Valor (NOVO) */}
             <div>
-                <label htmlFor="value" className="block text-sm font-medium text-gray-700 mb-1">Valor (R$)</label>
+                <label htmlFor="value" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Valor (R$)</label>
                 <input
-                  type="text"
-                  id="value"
-                  value={value}
-                  onChange={(e) => {
-                    // Simples máscara para valor monetário PT-BR
-                    let v = e.target.value.replace(/\D/g,'');
-                    v = (parseInt(v, 10) / 100).toFixed(2) + '';
-                    v = v.replace(".", ",");
-                    v = v.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
-                    if (v === 'NaN' || v === '0,00') v = '';
-                    setValue(v);
-                  }}
-                  placeholder="0,00"
-                  className="w-full px-3 py-2 border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-indigo-500"
+                    type="text"
+                    id="value"
+                    value={value}
+                    onChange={(e) => {
+                        const rawValue = e.target.value.replace(/[^\d,.]/g, '');
+                        const parts = rawValue.split(',');
+                        parts[0] = parts[0].replace(/\./g, '');
+                        if (parts[0].length > 3) {
+                           parts[0] = parts[0].replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+                        }
+                        setValue(parts.join(','));
+                    }}
+                    placeholder="0,00"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-300 dark:focus:ring-indigo-400 focus:border-indigo-500 dark:focus:border-indigo-400"
                 />
             </div>
             {/* Botões */}
-            <div className="flex justify-end items-center pt-4 border-t mt-6 space-x-3">
+            <div className="flex justify-end space-x-3 pt-4 border-t dark:border-gray-600">
                  {/* Botão Excluir removido por enquanto */}
-                 <button type="button" onClick={onClose} disabled={isSaving} className="px-4 py-2 bg-slate-200 text-slate-700 rounded-md hover:bg-slate-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-400 disabled:opacity-50">
+                 <button 
+                    type="button" 
+                    onClick={onClose} 
+                    disabled={isSaving}
+                    className="px-4 py-2 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-md hover:bg-gray-300 dark:hover:bg-gray-500 transition-colors disabled:opacity-50"
+                 >
                     Cancelar
                  </button>
-                 <button type="submit" disabled={isSaving} className={`px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 ${isSaving ? 'animate-pulse' : ''}`}>
-                    {isSaving ? 'Salvando...' : (isEditing ? 'Salvar Alterações' : 'Criar Agendamento')}
+                 <button 
+                    type="submit" 
+                    disabled={isSaving}
+                    className="px-4 py-2 bg-indigo-600 dark:bg-indigo-500 text-white rounded-md hover:bg-indigo-700 dark:hover:bg-indigo-600 transition-colors disabled:opacity-50"
+                 >
+                    {isSaving ? 'Salvando...' : (isEditing ? 'Salvar Alterações' : 'Adicionar Agendamento')}
                  </button>
             </div>
         </form>

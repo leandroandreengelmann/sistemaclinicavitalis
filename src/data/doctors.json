@@ -4,44 +4,25 @@
     "name": "Dr. Carlos Andrade",
     "specialties": ["Cardiologia", "Clínica Geral"],
     "workingHours": [
-      { "day": "Segunda", "start": "08:00", "end": "12:00" },
-      { "day": "Quarta", "start": "13:00", "end": "17:00" },
-      { "day": "Sexta", "start": "08:00", "end": "12:00" }
+      { "day": "Segunda", "start": "08:00", "end": "11:00" }, { "day": "Segunda", "start": "14:00", "end": "17:00" },
+      { "day": "Terça", "start": "08:00", "end": "11:00" }, { "day": "Terça", "start": "14:00", "end": "17:00" },
+      { "day": "Quarta", "start": "08:00", "end": "11:00" }, { "day": "Quarta", "start": "14:00", "end": "17:00" },
+      { "day": "Quinta", "start": "08:00", "end": "11:00" }, { "day": "Quinta", "start": "14:00", "end": "17:00" },
+      { "day": "Sexta", "start": "08:00", "end": "11:00" }, { "day": "Sexta", "start": "14:00", "end": "17:00" }
     ],
     "commissionRate": 0.15,
     "color": "#3b82f6"
-  },
-  {
-    "id": "doc2",
-    "name": "Dra. Ana Silva",
-    "specialties": ["Dermatologia"],
-    "workingHours": [
-      { "day": "Terça", "start": "09:00", "end": "18:00" },
-      { "day": "Quinta", "start": "09:00", "end": "18:00" }
-    ],
-    "commissionRate": 0.20,
-    "color": "#ec4899"
-  },
-  {
-    "id": "doc3",
-    "name": "Dr. Bruno Costa",
-    "specialties": ["Ortopedia"],
-    "workingHours": [
-      { "day": "Segunda", "start": "10:00", "end": "19:00" },
-      { "day": "Quarta", "start": "10:00", "end": "19:00" },
-      { "day": "Sexta", "start": "10:00", "end": "19:00" }
-    ],
-    "commissionRate": 0.12,
-    "color": "#10b981"
   },
   {
     "id": "doc4",
     "name": "Dra. Patricia Almeida",
     "specialties": ["Pediatria", "Clínica Geral"],
     "workingHours": [
-      { "day": "Segunda", "start": "08:00", "end": "17:00" },
-      { "day": "Terça", "start": "08:00", "end": "17:00" },
-      { "day": "Quarta", "start": "08:00", "end": "12:00" }
+      { "day": "Segunda", "start": "08:00", "end": "11:00" }, { "day": "Segunda", "start": "14:00", "end": "17:00" },
+      { "day": "Terça", "start": "08:00", "end": "11:00" }, { "day": "Terça", "start": "14:00", "end": "17:00" },
+      { "day": "Quarta", "start": "08:00", "end": "11:00" }, { "day": "Quarta", "start": "14:00", "end": "17:00" },
+      { "day": "Quinta", "start": "08:00", "end": "11:00" }, { "day": "Quinta", "start": "14:00", "end": "17:00" },
+      { "day": "Sexta", "start": "08:00", "end": "11:00" }, { "day": "Sexta", "start": "14:00", "end": "17:00" }
     ],
     "commissionRate": 0.18,
     "color": "#f97316"
@@ -51,38 +32,13 @@
     "name": "Dr. Ricardo Mendes",
     "specialties": ["Oftalmologia"],
     "workingHours": [
-      { "day": "Quinta", "start": "14:00", "end": "20:00" },
-      { "day": "Sexta", "start": "14:00", "end": "20:00" }
+      { "day": "Segunda", "start": "08:00", "end": "11:00" }, { "day": "Segunda", "start": "14:00", "end": "17:00" },
+      { "day": "Terça", "start": "08:00", "end": "11:00" }, { "day": "Terça", "start": "14:00", "end": "17:00" },
+      { "day": "Quarta", "start": "08:00", "end": "11:00" }, { "day": "Quarta", "start": "14:00", "end": "17:00" },
+      { "day": "Quinta", "start": "08:00", "end": "11:00" }, { "day": "Quinta", "start": "14:00", "end": "17:00" },
+      { "day": "Sexta", "start": "08:00", "end": "11:00" }, { "day": "Sexta", "start": "14:00", "end": "17:00" }
     ],
     "commissionRate": 0.25,
     "color": "#8b5cf6"
-  },
-  {
-    "id": "doc6",
-    "name": "Dra. Sofia Pereira",
-    "specialties": ["Ginecologia", "Obstetrícia"],
-    "workingHours": [
-      { "day": "Terça", "start": "08:00", "end": "15:00" },
-      { "day": "Quarta", "start": "08:00", "end": "15:00" },
-      { "day": "Quinta", "start": "08:00", "end": "15:00" }
-    ],
-    "commissionRate": 0.16,
-    "color": "#d946ef"
-  },
-  {
-    "id": "doc7",
-    "name": "Dr. Gustavo Pereira"
-  },
-  {
-    "id": "doc8",
-    "name": "Dra. Sofia Ferreira"
-  },
-  {
-    "id": "doc9",
-    "name": "Dr. André Santos"
-  },
-  {
-    "id": "doc10",
-    "name": "Dra. Vanessa Oliveira"
   }
 ] 

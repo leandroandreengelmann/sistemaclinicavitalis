@@ -1,0 +1,38 @@
+[
+  {
+    "id": "hp-001",
+    "name": "Unimed Nacional - Plano Essencial",
+    "registrationCode": "123456/78",
+    "contactPerson": "Ana Silva",
+    "phone": "(11) 98765-4321",
+    "email": "ana.silva@unimednac.com.br",
+    "notes": "Cobertura nacional básica."
+  },
+  {
+    "id": "hp-002",
+    "name": "Bradesco Saúde - Top Nacional",
+    "registrationCode": "987654/32",
+    "contactPerson": "Carlos Pereira",
+    "phone": "(21) 91234-5678",
+    "email": "carlos.p@bradescosaude.com.br",
+    "notes": "Plano com ampla rede credenciada e reembolso."
+  },
+  {
+    "id": "hp-003",
+    "name": "Amil Fácil S60 SP",
+    "registrationCode": "555444/11",
+    "contactPerson": "",
+    "phone": "0800 707 1000",
+    "email": "",
+    "notes": "Plano regional com bom custo-benefício para São Paulo."
+  },
+  {
+    "id": "hp-004",
+    "name": "Particular",
+    "registrationCode": null,
+    "contactPerson": null,
+    "phone": null,
+    "email": null,
+    "notes": "Utilizado para pacientes sem convênio."
+  }
+] 

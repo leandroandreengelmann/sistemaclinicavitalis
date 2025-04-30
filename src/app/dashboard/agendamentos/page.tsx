@@ -4,9 +4,9 @@ import { useState, useEffect } from 'react';
 import DashboardLayout from '@/components/dashboard/DashboardLayout';
 import AppointmentList from '@/components/dashboard/agendamentos/AppointmentList';
 import AppointmentForm from '@/components/calendar/AppointmentForm';
-import MultiAppointmentForm, { AddedSlot } from '@/components/dashboard/agendamentos/MultiAppointmentForm';
+import MultiAppointmentForm from '@/components/dashboard/agendamentos/MultiAppointmentForm';
 import { useAppointments } from '@/context/AppointmentsContext';
-import { Appointment, AppointmentFormData, Doctor, Patient } from '@/types';
+import { Appointment, Doctor, Patient, AppointmentFormData } from '@/types/index';
 import toast from 'react-hot-toast';
 import doctorsData from '@/data/doctors.json';
 import patientsData from '@/data/patients.json';
@@ -15,7 +15,7 @@ import { checkAppointmentOverlap } from '@/utils/appointmentUtils';
 import { parseISO, isBefore } from 'date-fns';
 
 export default function ManageAppointmentsPage() {
-  const { appointments, addAppointment, updateAppointment, deleteAppointment } = useAppointments();
+  const { appointments, addAppointment, updateAppointment, deleteAppointment, clearAllAppointments } = useAppointments();
 
   // Estados para controlar os modais/formulários
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -68,26 +68,33 @@ export default function ManageAppointmentsPage() {
     }
 
     try {
-      const appointmentData = {
-        title: `${patient.name} / ${doctor.name}`,
-        ...formData,
+      const baseAppointmentData = {
+        title: `${patients.find(p => p.id === formData.patientId)?.name || 'P.'} / ${doctors.find(d => d.id === formData.doctorId)?.name || 'Dr.'}`,
+        start: formData.start,
+        end: formData.end,
+        doctorId: formData.doctorId,
+        patientId: formData.patientId,
+        status: formData.status || 'Scheduled',
+        priority: formData.priority || 'Média',
+        healthPlanId: formData.healthPlanId || undefined,
+        value: formData.value || undefined,
         extendedProps: {
           doctorId: formData.doctorId,
           patientId: formData.patientId
         }
       };
+
       if (id) {
-        const updatedAppointment: Appointment = { 
-            id, 
-            ...appointmentData, 
-            bookingId: editingAppointment?.bookingId
+        const dataToUpdate: Partial<Appointment> = {
+          ...baseAppointmentData,
+          bookingId: editingAppointment?.bookingId 
         };
-        updateAppointment(updatedAppointment);
+        updateAppointment(id, dataToUpdate);
         toast.success("Agendamento atualizado com sucesso!");
       } else {
         const newAppointment: Appointment = {
           id: `app-${uuidv4()}`,
-          ...appointmentData,
+          ...baseAppointmentData,
         };
         addAppointment(newAppointment);
         toast.success("Agendamento criado com sucesso!");
@@ -105,108 +112,15 @@ export default function ManageAppointmentsPage() {
     setIsMultiFormOpen(true);
   };
 
-  const handleMultiSave = (patientId: string, slots: Omit<AddedSlot, 'slotId' | 'doctorName'>[]) => {
-    const patient = patients.find(p => p.id === patientId);
-    if (!patient) {
-        toast.error("Erro: Paciente selecionado inválido.");
-        return;
-    }
-
-    // *** VALIDAÇÃO DE CONFLITOS ANTES DE CRIAR ***
-    try {
-      for (let i = 0; i < slots.length; i++) {
-          const currentSlot = slots[i];
-
-          // 1. Verificar contra agendamentos existentes
-          const overlapExistingCheck = checkAppointmentOverlap(
-              { ...currentSlot, patientId }, // Adiciona patientId ao slot para verificação completa
-              appointments
-              // Nenhum ID de atualização, pois estamos sempre criando
-          );
-          if (overlapExistingCheck.overlap) {
-              toast.error(`Conflito no ${i + 1}º horário: ${overlapExistingCheck.message}`);
-              return; // Cancela toda a operação
-          }
-
-          // 2. Verificar contra outros slots no mesmo lote
-          for (let j = i + 1; j < slots.length; j++) {
-              const otherSlot = slots[j];
-              const currentStart = parseISO(currentSlot.start);
-              const currentEnd = parseISO(currentSlot.end);
-              const otherStart = parseISO(otherSlot.start);
-              const otherEnd = parseISO(otherSlot.end);
-
-              // Verifica sobreposição de tempo
-              const timeOverlap = isBefore(currentStart, otherEnd) && isBefore(otherStart, currentEnd);
-
-              if (timeOverlap) {
-                  // Verifica conflito de médico ou paciente (paciente é sempre o mesmo aqui)
-                  if (currentSlot.doctorId === otherSlot.doctorId || patientId === patientId) { // A segunda condição é sempre true, mas explícita
-                      toast.error(`Conflito interno entre o ${i + 1}º e ${j + 1}º horário adicionado.`);
-                      return; // Cancela toda a operação
-                  }
-              }
-          }
-      }
-    } catch(e) {
-        // Captura erros do parseISO dentro da validação, se houver
-        console.error("Erro durante a validação de horários múltiplos:", e);
-        toast.error("Erro ao validar os horários propostos.");
-        return;
-    }
-    // *** FIM DA VALIDAÇÃO ***
-
-    // Se passou por todas as validações, prosseguir com a criação
-    const bookingId = `booking-${uuidv4()}`; 
-    let createdCount = 0;
-    try {
-        slots.forEach(slot => {
-            const doctor = doctors.find(d => d.id === slot.doctorId);
-            // Validação de médico já feita na checagem de overlap implícita, mas podemos manter por segurança
-            if (!doctor) { 
-                console.warn(`Médico não encontrado para slot ${slot.start} durante a criação. Pulando.`);
-                // Não deveria acontecer se a validação passou, mas por segurança
-                return; 
-            }
-            const newAppointment: Appointment = {
-                id: `app-${uuidv4()}`,
-                title: `${patient.name} / ${doctor.name}`,
-                start: slot.start,
-                end: slot.end,
-                doctorId: slot.doctorId,
-                patientId: patientId,
-                bookingId: bookingId, 
-                extendedProps: {
-                    doctorId: slot.doctorId,
-                    patientId: patientId
-                }
-            };
-            addAppointment(newAppointment);
-            createdCount++;
-        });
-        if (createdCount > 0) {
-            toast.success(`${createdCount} agendamento(s) criado(s) com sucesso para ${patient.name}!`);
-        }
-        handleCloseForm();
-    } catch (error) {
-        console.error("Erro ao salvar múltiplos agendamentos:", error);
-        toast.error("Ocorreu um erro ao salvar os agendamentos.");
-    }
-  };
-
   // --- Handler Comum de Exclusão --- 
   const handleDeleteAppointment = (appointmentId: string) => {
     const appointmentToDelete = appointments.find(a => a.id === appointmentId);
     if (!appointmentToDelete) return;
-    toast((t) => (
-      <span className="flex flex-col items-center">
-        <p className="mb-2 text-center">Tem certeza que deseja excluir<br/>o agendamento <b>{appointmentToDelete.title}</b><br/>em {new Date(appointmentToDelete.start).toLocaleString('pt-BR')}?</p>
-        <div className="flex gap-2">
-          <button onClick={() => { try { deleteAppointment(appointmentId); toast.success(`Agendamento excluído com sucesso!`, { id: t.id }); } catch (error) { console.error("Erro ao excluir agendamento:", error); toast.error("Falha ao excluir agendamento.", { id: t.id }); } }} className="px-3 py-1 bg-red-600 text-white rounded text-sm hover:bg-red-700">Excluir</button>
-          <button onClick={() => toast.dismiss(t.id)} className="px-3 py-1 bg-gray-300 text-gray-800 rounded text-sm hover:bg-gray-400">Cancelar</button>
-        </div>
-      </span>
-    ), { duration: 8000 });
+
+    if (window.confirm(`Tem certeza que deseja excluir o agendamento de ${appointmentToDelete.title}?`)) {
+      deleteAppointment(appointmentId);
+      toast.success("Agendamento excluído com sucesso!");
+    }
   };
 
   // --- Handler Comum de Fechamento --- 
@@ -217,48 +131,66 @@ export default function ManageAppointmentsPage() {
     setSelectedDateForNew(null);
   };
 
+  // --- Handler para Limpar Todos os Agendamentos --- 
+  const handleClearAll = () => {
+    if (window.confirm("ATENÇÃO!\n\nTem certeza ABSOLUTA que deseja excluir TODOS os agendamentos?\n\nEsta ação é PERMANENTE e IRREVERSÍVEL.")) {
+      clearAllAppointments(); // Chama a função do contexto
+    }
+  };
+
   return (
     <DashboardLayout>
-      <div className="p-4 md:p-6">
-        <div className="flex justify-between items-center mb-6 gap-4">
-          <h1 className="text-2xl font-semibold">Gestão de Agendamentos</h1>
-          <div className="flex gap-2">
-            <button 
-              onClick={handleOpenMultiForm}
-              className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors text-sm"
-            >
-              Agendamento Múltiplo
-            </button>
-            <button 
-              onClick={handleAddNewAppointment}
-              className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors text-sm"
-            >
-              Novo Agendamento Único
-            </button>
-          </div>
+      <div className="container mx-auto p-4">
+        <h1 className="text-2xl font-semibold text-gray-800 dark:text-gray-200 mb-6">Gestão de Agendamentos</h1>
+        
+        <div className="flex flex-col sm:flex-row justify-end gap-3 mb-6">
+          <button
+            onClick={handleAddNewAppointment}
+            className="px-4 py-2 bg-blue-600 dark:bg-blue-500 text-white rounded-md hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors text-sm shadow"
+          >
+            + Novo Agendamento
+          </button>
+          <button
+            onClick={handleOpenMultiForm}
+            className="px-4 py-2 bg-teal-600 dark:bg-teal-500 text-white rounded-md hover:bg-teal-700 dark:hover:bg-teal-600 transition-colors text-sm shadow"
+          >
+            Agendamento Sequencial (IA)
+          </button>
+          <button
+            onClick={handleClearAll}
+            className="px-4 py-2 bg-red-600 dark:bg-red-500 text-white rounded-md hover:bg-red-700 dark:hover:bg-red-600 transition-colors text-sm shadow"
+            title="Excluir permanentemente TODOS os agendamentos existentes"
+          >
+            Limpar Todos Agendamentos
+          </button>
         </div>
 
-        <AppointmentList 
-          appointments={appointments} 
-          onEdit={handleEditAppointment} 
-          onDelete={handleDeleteAppointment} 
-        />
+        <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+          <AppointmentList
+            appointments={appointments} 
+            onEdit={handleEditAppointment}
+            onDelete={handleDeleteAppointment}
+          />
+          {appointments.length === 0 && (
+            <p className='text-center text-gray-500 dark:text-gray-400 mt-4'>Nenhum agendamento encontrado.</p>
+          )}
+        </div>
 
         {isFormOpen && (
           <AppointmentForm 
-            initialData={editingAppointment}
-            selectedDate={editingAppointment ? null : selectedDateForNew}
-            onSave={handleSaveAppointment}
-            onClose={handleCloseForm}
+            initialData={editingAppointment ? editingAppointment : undefined}
+            selectedDate={selectedDateForNew}
+            onSave={handleSaveAppointment} 
+            onClose={handleCloseForm} 
           />
         )}
 
         {isMultiFormOpen && (
-          <MultiAppointmentForm
-            onMultiSave={handleMultiSave}
+          <MultiAppointmentForm 
             onClose={handleCloseForm} 
           />
         )}
+
       </div>
     </DashboardLayout>
   );

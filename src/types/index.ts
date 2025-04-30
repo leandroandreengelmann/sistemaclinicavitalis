@@ -26,6 +26,7 @@ export interface Appointment {
   bookingId?: string; // Adicionado para agrupar agendamentos múltiplos
   value?: number; // <- NOVO CAMPO: Valor do serviço/consulta
   status?: string; // <- NOVO CAMPO: Status (Confirmado, Cancelado, Finalizado, etc.)
+  priority?: 'Mínima' | 'Média' | 'Máxima'; // <-- NOVO CAMPO: Prioridade para IA
   extendedProps?: { [key: string]: any }; // Adiciona extendedProps opcional
 }
 
@@ -100,3 +101,47 @@ export interface HealthPlan {
   notes?: string; // Observações (opcional)
 }
 // --- Fim da Interface para Plano de Saúde --- 
+
+// --- NOVO: Tipos para Gestão de Leitos ---
+
+// --- NOVO: Interface para Quarto ---
+export interface Room {
+  id: string;       // Identificador único do quarto
+  number: string;   // Número ou identificação do quarto (ex: "101", "203A")
+  floor?: string;   // Andar (opcional, ex: "1º", "Térreo")
+  type?: string;    // Tipo de quarto (opcional, ex: "Apartamento", "Enfermaria")
+  notes?: string;   // Observações (opcional)
+}
+// --- Fim da Interface para Quarto ---
+
+// Enum para os status possíveis de um leito
+export enum BedStatus {
+  LIVRE = 'Livre',
+  OCUPADO = 'Ocupado',
+  HIGIENIZANDO = 'Higienizando',
+  DESATIVADO = 'Desativado',
+  // Poderíamos adicionar outros status como 'Manutenção', 'Reservado', etc.
+}
+
+// Interface para o histórico de status de um leito
+export interface BedStatusHistoryEntry {
+  status: BedStatus;
+  timestamp: Date;
+  notes?: string; // Opcional: para adicionar notas sobre a mudança
+}
+
+// Interface principal para um Leito
+export interface Bed {
+  id: string; // Identificador único do leito
+  number: string; // Número ou identificação do leito (ex: "101A", "UTI-02")
+  status: BedStatus; // Status atual do leito
+  type?: string; // Restaurar propriedade type
+  location?: string; // Restaurar propriedade location
+  patientId?: string | null; // ID do paciente atualmente no leito (se ocupado)
+  admissionDate?: Date | null; // Data de admissão do paciente no leito
+  statusHistory: BedStatusHistoryEntry[]; // Restaurar propriedade statusHistory
+  notes?: string; // Observações gerais sobre o leito
+  roomId: string; // <<-- ADICIONAR: ID do quarto ao qual o leito pertence
+}
+
+// --- Fim dos Tipos para Gestão de Leitos --- 

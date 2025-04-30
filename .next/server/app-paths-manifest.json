@@ -1,6 +1,7 @@
 {
-  "/dashboard/healthplans/new/page": "app/dashboard/healthplans/new/page.js",
+  "/api/suggest-slots/route": "app/api/suggest-slots/route.js",
+  "/page": "app/page.js",
   "/dashboard/agendamentos/page": "app/dashboard/agendamentos/page.js",
-  "/dashboard/healthplans/page": "app/dashboard/healthplans/page.js",
-  "/dashboard/page": "app/dashboard/page.js"
+  "/dashboard/page": "app/dashboard/page.js",
+  "/dashboard/financeiro/page": "app/dashboard/financeiro/page.js"
 }

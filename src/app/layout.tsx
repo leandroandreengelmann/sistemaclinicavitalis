@@ -3,18 +3,13 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import "@/styles/calendar-overrides.css";
 import "@/styles/dashboard.css";
-import { AppointmentsProvider } from "@/context/AppointmentsContext";
-import { FinancialProvider } from '@/context/FinancialContext';
-import { DoctorsProvider } from '@/context/DoctorsContext';
-import { PatientsProvider } from '@/context/PatientsContext';
-import { HealthPlansProvider } from '@/context/HealthPlansContext';
-import { Toaster } from 'react-hot-toast';
+import { Providers } from "@/components/providers";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Clínica - Agendamentos",
-  description: "Calendário de Agendamentos da Clínica",
+  title: "Clínica Vitales - Sistema de Gestão",
+  description: "Sistema de Gestão Integrada para Clínicas Médicas",
 };
 
 export default function RootLayout({
@@ -23,29 +18,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-BR">
-      <body className={inter.className}>
-        <DoctorsProvider>
-          <FinancialProvider>
-            <AppointmentsProvider>
-              <PatientsProvider>
-                <HealthPlansProvider>
-                  <Toaster 
-                    position="top-center" 
-                    toastOptions={{
-                      style: {
-                        padding: '16px',
-                        fontSize: '1.1rem',
-                        minWidth: '250px',
-                      },
-                    }}
-                  />
-                  {children}
-                </HealthPlansProvider>
-              </PatientsProvider>
-            </AppointmentsProvider>
-          </FinancialProvider>
-        </DoctorsProvider>
+    <html lang="pt-BR" suppressHydrationWarning={true}>
+      <body className={`${inter.className} bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100`}>
+        <Providers>
+          {children}
+        </Providers>
       </body>
     </html>
   );

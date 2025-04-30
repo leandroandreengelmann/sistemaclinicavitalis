@@ -11,77 +11,26 @@
       "static/chunks/main-app.js",
       "static/chunks/app/page.js"
     ],
-    "/dashboard/doctors/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/dashboard/doctors/page.js"
-    ],
-    "/dashboard/doctors/[doctorId]/edit/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/dashboard/doctors/[doctorId]/edit/page.js"
-    ],
-    "/dashboard/doctors/[doctorId]/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/dashboard/doctors/[doctorId]/page.js"
-    ],
     "/dashboard/agendamentos/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/css/app/dashboard/agendamentos/page.css",
       "static/chunks/app/dashboard/agendamentos/page.js"
+    ],
+    "/api/suggest-slots/route": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/api/suggest-slots/route.js"
     ],
     "/dashboard/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/dashboard/page.js"
     ],
-    "/dashboard/patients/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/dashboard/patients/page.js"
-    ],
     "/dashboard/financeiro/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/css/app/dashboard/financeiro/page.css",
       "static/chunks/app/dashboard/financeiro/page.js"
-    ],
-    "/dashboard/financeiro/relatorios/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/dashboard/financeiro/relatorios/page.js"
-    ],
-    "/dashboard/register/patient/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/dashboard/register/patient/page.js"
-    ],
-    "/dashboard/register/healthplan/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/dashboard/register/healthplan/page.js"
-    ],
-    "/dashboard/register/doctor/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/dashboard/register/doctor/page.js"
-    ],
-    "/dashboard/healthplans/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/dashboard/healthplans/page.js"
-    ],
-    "/dashboard/healthplans/new/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/dashboard/healthplans/new/page.js"
-    ],
-    "/dashboard/healthplans/[planId]/edit/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/dashboard/healthplans/[planId]/edit/page.js"
     ]
   }
 }

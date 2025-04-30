@@ -111,26 +111,31 @@ export default function ManagePatientsPage() {
   return (
     <DashboardLayout>
       <div className="p-4 md:p-6">
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-semibold">Gestão de Pacientes</h1>
+        <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-6">
+          <h1 className="text-2xl font-semibold text-gray-800 dark:text-gray-200">Gestão de Pacientes</h1>
           <button 
             onClick={handleAddNewPatient}
-            className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors"
+            className="px-4 py-2 bg-indigo-600 dark:bg-indigo-500 text-white rounded-md hover:bg-indigo-700 dark:hover:bg-indigo-600 transition-colors shadow"
           >
             Adicionar Novo Paciente
           </button>
         </div>
 
-        {isLoading && <p>Carregando pacientes...</p>}
+        {isLoading && <p className="text-gray-600 dark:text-gray-400">Carregando pacientes...</p>}
         {/* O erro já é mostrado via toast no useEffect */}
         {/* error && <p className="text-red-500">{error}</p> */}
 
         {!isLoading && !error && (
-          <PatientList 
-            patients={patients} 
-            onEdit={handleEditPatient} 
-            onDelete={handleDeletePatient} 
-          />
+          <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+            <PatientList 
+              patients={patients} 
+              onEdit={handleEditPatient} 
+              onDelete={handleDeletePatient} 
+            />
+            {patients.length === 0 && (
+              <p className='text-center text-gray-500 dark:text-gray-400 mt-4'>Nenhum paciente encontrado.</p>
+            )}
+          </div>
         )}
 
         {isFormOpen && (

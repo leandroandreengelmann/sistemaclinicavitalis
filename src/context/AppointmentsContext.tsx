@@ -20,6 +20,7 @@ interface AppointmentsContextType {
   updateAppointment: (appointmentId: string, updates: Partial<Appointment>) => void;
   deleteAppointment: (appointmentId: string) => void;
   getAppointmentById: (appointmentId: string) => Appointment | undefined;
+  clearAllAppointments: () => void;
 }
 
 const AppointmentsContext = createContext<AppointmentsContextType | undefined>(
@@ -87,6 +88,7 @@ export const AppointmentsProvider: React.FC<AppointmentsProviderProps> = ({ chil
     const appointmentToAdd = {
       ...newAppointmentWithProps,
       status: newAppointmentWithProps.status || 'Confirmado', // Status inicial padrão
+      priority: newAppointmentWithProps.priority || 'Média', // <-- PRIORIDADE PADRÃO
       extendedProps: {
           ...(newAppointmentWithProps.extendedProps || {}),
           doctorId: newAppointmentWithProps.doctorId,
@@ -161,13 +163,33 @@ export const AppointmentsProvider: React.FC<AppointmentsProviderProps> = ({ chil
     return appointments.find(app => app.id === appointmentId);
   };
 
+  // --- NOVA FUNÇÃO --- 
+  const clearAllAppointments = () => {
+    try {
+      setAppointments([]); // Limpa o estado
+      localStorage.removeItem(LOCAL_STORAGE_KEY); // Limpa o localStorage
+      toast.success("Todos os agendamentos foram removidos.");
+    } catch (error) {
+      console.error("Erro ao limpar todos os agendamentos:", error);
+      toast.error("Falha ao remover todos os agendamentos.");
+    }
+  };
+  // -----------------
+
   // Não renderiza children até carregar os dados para evitar flickering
   if (isLoading) {
     return <div>Carregando agendamentos...</div>; // Ou um spinner
   }
 
   return (
-    <AppointmentsContext.Provider value={{ appointments, addAppointment, updateAppointment, deleteAppointment, getAppointmentById }}>
+    <AppointmentsContext.Provider value={{ 
+      appointments, 
+      addAppointment, 
+      updateAppointment, 
+      deleteAppointment, 
+      getAppointmentById, 
+      clearAllAppointments
+    }}>
       {children}
     </AppointmentsContext.Provider>
   );

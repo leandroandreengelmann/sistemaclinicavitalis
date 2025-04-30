@@ -36,21 +36,21 @@ export default function UpcomingAppointments({ appointments }: UpcomingAppointme
   }, {} as { [key: string]: string });
 
   return (
-    <div className="bg-white rounded-lg shadow-sm p-6">
-      <h2 className="text-xl font-semibold text-gray-800 mb-4">Próximas Consultas</h2>
+    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
+      <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-100 mb-4">Próximas Consultas</h2>
       
       {upcomingAppointments.length === 0 ? (
         <div className="text-center py-8">
           <svg 
             xmlns="http://www.w3.org/2000/svg" 
-            className="h-12 w-12 mx-auto text-gray-400" 
+            className="h-12 w-12 mx-auto text-gray-400 dark:text-gray-500" 
             fill="none" 
             viewBox="0 0 24 24" 
             stroke="currentColor"
           >
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
-          <p className="mt-2 text-gray-500">Nenhuma consulta agendada.</p>
+          <p className="mt-2 text-gray-500 dark:text-gray-400">Nenhuma consulta agendada.</p>
         </div>
       ) : (
         <div className="space-y-3">
@@ -64,9 +64,9 @@ export default function UpcomingAppointments({ appointments }: UpcomingAppointme
             return (
               <div 
                 key={appointment.id} 
-                className="flex items-center p-3 border border-gray-100 rounded-lg hover:bg-gray-50 transition-colors"
+                className="flex items-center p-3 border border-gray-100 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
               >
-                <div className="bg-indigo-100 text-indigo-700 p-3 rounded-full">
+                <div className="bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-400 p-3 rounded-full">
                   <svg 
                     xmlns="http://www.w3.org/2000/svg" 
                     className="h-5 w-5" 
@@ -79,12 +79,12 @@ export default function UpcomingAppointments({ appointments }: UpcomingAppointme
                 </div>
                 <div className="ml-4 flex-grow">
                   <div className="flex justify-between">
-                    <p className="font-medium text-gray-800">{patientName}</p>
-                    <span className="text-sm text-gray-500">{formattedDate}</span>
+                    <p className="font-medium text-gray-800 dark:text-gray-100">{patientName}</p>
+                    <span className="text-sm text-gray-500 dark:text-gray-400">{formattedDate}</span>
                   </div>
                   <div className="flex justify-between mt-1">
-                    <p className="text-sm text-gray-600">Dr. {doctorName}</p>
-                    <span className="text-sm font-medium text-indigo-600">{formattedTime}</span>
+                    <p className="text-sm text-gray-600 dark:text-gray-300">Dr. {doctorName}</p>
+                    <span className="text-sm font-medium text-indigo-600 dark:text-indigo-400">{formattedTime}</span>
                   </div>
                 </div>
               </div>

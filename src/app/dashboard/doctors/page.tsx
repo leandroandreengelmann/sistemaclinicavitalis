@@ -3,23 +3,41 @@
 import React, { useState, useEffect } from 'react';
 import DashboardLayout from '@/components/dashboard/DashboardLayout';
 import DoctorList from '@/components/dashboard/doctors/DoctorList';
-// import DoctorForm from '@/components/dashboard/doctors/DoctorForm'; // Remover import do form
+import EditDoctorForm from '@/components/dashboard/medicos/EditDoctorForm';
 import { Doctor } from '@/types/index';
 import { useDoctors } from '@/context/DoctorsContext';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
 
 export default function ManageDoctorsPage() {
-  const { doctors, deleteDoctor, isLoading: doctorsLoading } = useDoctors(); // Remover updateDoctor
+  const { doctors, deleteDoctor, isLoading: doctorsLoading, updateDoctor } = useDoctors();
   
-  // Remover estados de formulário/edição
-  // const [editingDoctor, setEditingDoctor] = useState<Doctor | null>(null);
-  // const [isEditFormOpen, setIsEditFormOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingDoctor, setEditingDoctor] = useState<Doctor | null>(null);
 
-  // Remover handleEditDoctor
-  // const handleEditDoctor = (doctor: Doctor) => { ... };
+  const handleEdit = (doctor: Doctor) => {
+    setEditingDoctor(doctor);
+    setIsModalOpen(true);
+  };
 
-  // Manter handleDeleteDoctor
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setEditingDoctor(null);
+  };
+
+  const handleSaveDoctor = async (updatedDoctorData: Doctor) => {
+    try {
+      const { id, ...updates } = updatedDoctorData;
+      if (!id) {
+          throw new Error("ID do médico ausente nos dados atualizados.");
+      }
+      updateDoctor(id, updates);
+    } catch (error) {
+      console.error("Erro ao chamar updateDoctor do contexto:", error);
+      throw error; 
+    }
+  };
+
   const handleDeleteDoctor = (doctorId: string) => {
     const doctorToDelete = doctors.find(d => d.id === doctorId);
     if (!doctorToDelete) return;
@@ -31,7 +49,7 @@ export default function ManageDoctorsPage() {
           <button
             onClick={() => {
               try {
-                deleteDoctor(doctorId); // Usa função do contexto
+                deleteDoctor(doctorId);
                 toast.success(`Médico ${doctorToDelete.name} excluído com sucesso!`, { id: t.id });
               } catch (error) {
                 console.error("Erro ao excluir médico:", error);
@@ -53,12 +71,6 @@ export default function ManageDoctorsPage() {
     ), { duration: 8000 });
   };
 
-  // Remover handleUpdateDoctor (era o antigo save)
-  // const handleUpdateDoctor = (formData: Omit<Doctor, 'id'>) => { ... };
-
-  // Remover handleCloseEditForm
-  // const handleCloseEditForm = () => { ... };
-
   return (
     <DashboardLayout>
       <div className="p-4 md:p-6">
@@ -77,13 +89,18 @@ export default function ManageDoctorsPage() {
         {!doctorsLoading && (
           <DoctorList 
             doctors={doctors} 
-            // onEdit não é mais passado
-            onDelete={handleDeleteDoctor} // Apenas onDelete
+            onEdit={handleEdit}
+            onDelete={handleDeleteDoctor}
           />
         )}
 
-        {/* Remover renderização do formulário daqui */}
-        {/* {isEditFormOpen && ( ... )} */}
+        {isModalOpen && editingDoctor && (
+          <EditDoctorForm
+            doctor={editingDoctor}
+            onClose={handleCloseModal}
+            onSave={handleSaveDoctor}
+          />
+        )}
       </div>
     </DashboardLayout>
   );
