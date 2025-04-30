@@ -4,6 +4,13 @@ import fs from 'fs/promises'; // Para interagir com o sistema de arquivos
 import path from 'path';
 import { Doctor } from '@/types'; // Importar o tipo Doctor
 
+// Define interface for route parameters
+interface RouteParams {
+  params: {
+    id: string;
+  };
+}
+
 // Caminho para o arquivo JSON de médicos
 const doctorsFilePath = path.resolve(process.cwd(), 'src/data/doctors.json');
 
@@ -35,8 +42,8 @@ async function writeDoctors(doctors: Doctor[]): Promise<void> {
 
 // --- Handler para PUT (Atualização Completa) ou PATCH (Atualização Parcial) ---
 // Vamos usar PUT para simplificar, esperando o objeto completo do médico
-export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
-    const doctorId = params.id;
+export async function PUT(request: NextRequest, context: RouteParams) {
+    const doctorId = context.params.id; // Access id via context
 
     if (!doctorId) {
         return NextResponse.json({ error: 'ID do médico não fornecido.' }, { status: 400 });
