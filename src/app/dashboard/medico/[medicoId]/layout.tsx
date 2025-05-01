@@ -2,7 +2,7 @@
 
 import React, { ReactNode, useState } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation'; // Para destacar link ativo
+import { usePathname, useParams } from 'next/navigation'; // Para destacar link ativo e obter parâmetros
 import { 
     HomeIcon, 
     UserGroupIcon,
@@ -16,9 +16,9 @@ import {
 // Interface para as props do layout
 interface MedicoLayoutProps {
     children: ReactNode;
-    params: {
+    params: Promise<{
         medicoId: string;
-    };
+    }>;
 }
 
 // Componente do Sidebar (Estilo adaptado do DashboardLayout)
@@ -91,7 +91,8 @@ const MedicoSidebar = ({ medicoId }: { medicoId: string }) => {
 
 // Layout Principal
 export default function MedicoLayout({ children, params }: MedicoLayoutProps) {
-    const { medicoId } = params;
+    const paramsObj = useParams();
+    const medicoId = paramsObj.medicoId as string;
 
     return (
         <div className="flex bg-gray-100 min-h-screen">

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, ChangeEvent, FormEvent } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 import { useAppointments } from '@/context/AppointmentsContext';
 import { Appointment, Patient } from '@/types/index';
 import patientsData from '@/data/patients.json';
@@ -30,15 +30,10 @@ interface ClinicalNote {
 }
 const NOTES_LOCAL_STORAGE_KEY = 'clinicClinicalNotes';
 
-interface AtendimentoPageProps {
-  params: {
-    appointmentId: string; 
-  };
-}
-
-export default function AtendimentoPage({ params }: AtendimentoPageProps) {
+export default function AtendimentoPage() {
   const router = useRouter();
-  const { appointmentId } = params;
+  const params = useParams();
+  const appointmentId = params.appointmentId as string;
   const { getAppointmentById, updateAppointment } = useAppointments();
   
   const [appointment, setAppointment] = useState<Appointment | null>(null);

@@ -35,8 +35,9 @@ async function writeDoctors(doctors: Doctor[]): Promise<void> {
 
 // --- Handler para PUT (Atualização Completa) ou PATCH (Atualização Parcial) ---
 // Vamos usar PUT para simplificar, esperando o objeto completo do médico
-export async function PUT(request: NextRequest, context) {
-    const doctorId = context.params.id; // Access id via context
+export async function PUT(request: NextRequest, context: { params: Promise<{ id: string }> }) {
+    const params = await context.params;
+    const doctorId = params.id; // Access id via context
 
     if (!doctorId) {
         return NextResponse.json({ error: 'ID do médico não fornecido.' }, { status: 400 });

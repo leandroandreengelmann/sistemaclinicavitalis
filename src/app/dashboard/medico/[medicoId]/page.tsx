@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, ChangeEvent, FormEvent } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 import { useAppointments } from '@/context/AppointmentsContext';
 import { Appointment, Patient } from '@/types/index'; // Doctor não é mais necessário aqui
 import patientsData from '@/data/patients.json';
@@ -204,13 +204,15 @@ const HistoricoDoDia = ({ medicoId }: { medicoId: string }) => {
 
 // --- Página Principal do Dashboard do Médico (Visão Geral) ---
 interface MedicoDashboardPageProps {
-  params: {
+  params: Promise<{
     medicoId: string;
-  };
+  }>;
 }
 
 export default function MedicoDashboardPage({ params }: MedicoDashboardPageProps) {
-  const { medicoId } = params;
+  const router = useRouter();
+  const paramsObj = useParams();
+  const medicoId = paramsObj.medicoId as string;
 
   if (!medicoId) {
      return <div className="p-4 text-red-500">Erro: ID do Médico não fornecido na URL.</div>;

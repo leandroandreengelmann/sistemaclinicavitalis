@@ -6,15 +6,17 @@ import { useAppointments } from '@/context/AppointmentsContext';
 import { Appointment, Patient } from '@/types/index';
 import patientsData from '@/data/patients.json';
 import { UserGroupIcon } from '@heroicons/react/24/outline'; // Ícone para a página
+import { useParams } from 'next/navigation';
 
 interface MedicoPacientesPageProps {
-  params: {
+  params: Promise<{
     medicoId: string;
-  };
+  }>;
 }
 
 export default function MedicoPacientesPage({ params }: MedicoPacientesPageProps) {
-  const { medicoId } = params;
+  const paramsObj = useParams();
+  const medicoId = paramsObj.medicoId as string;
   const { appointments } = useAppointments();
   const [attendedPatients, setAttendedPatients] = useState<Patient[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);

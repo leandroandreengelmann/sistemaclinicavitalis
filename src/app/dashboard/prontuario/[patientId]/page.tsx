@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 import { Patient } from '@/types/index';
 import patientsData from '@/data/patients.json';
 import { format } from 'date-fns';
@@ -23,14 +23,15 @@ interface ClinicalNote {
 const NOTES_LOCAL_STORAGE_KEY = 'clinicClinicalNotes';
 
 interface ProntuarioPageProps {
-  params: {
+  params: Promise<{
     patientId: string;
-  };
+  }>;
 }
 
 export default function ProntuarioPage({ params }: ProntuarioPageProps) {
   const router = useRouter();
-  const { patientId } = params;
+  const paramsObj = useParams();
+  const patientId = paramsObj.patientId as string;
 
   const [patient, setPatient] = useState<Patient | null>(null);
   const [allPatientNotes, setAllPatientNotes] = useState<ClinicalNote[]>([]);
